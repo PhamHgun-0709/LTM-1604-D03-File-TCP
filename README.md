@@ -4,7 +4,7 @@
     </a>
 </h2>
 <h2 align="center">
-   NETWORK PROGRAMMING
+   TRUYỀN FILE QUA TCP
 </h2>
 <div align="center">
     <p align="center">
@@ -18,3 +18,12 @@
 [![DaiNam University](https://img.shields.io/badge/DaiNam%20University-orange?style=for-the-badge)](https://dainam.edu.vn)
 
 </div>
+
+
+## 📖 1. Giới thiệu
+Truyền file qua TCP là quá trình gửi và nhận tệp tin giữa client và server thông qua giao thức TCP, đảm bảo dữ liệu được truyền tin cậy, đúng thứ tự và toàn vẹn. Nó thường được dùng trong chia sẻ dữ liệu, lưu trữ đám mây, email hay ứng dụng chat có gửi file. Các chức năng chính gồm: thiết lập kết nối tin cậy, truyền file dung lượng nhỏ đến lớn, kiểm tra và đảm bảo toàn vẹn dữ liệu, hỗ trợ nhiều kết nối, và có thể kết hợp mã hóa để tăng cường bảo mật.
+
+## 2. Công nghệ sử dụng
+## 3. Một số hình ảnh hệ thống
+## 4. Các bước cài đặt
+## 5. Liên hệ cá nhân
