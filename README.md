@@ -20,7 +20,7 @@
 </div>
 
 
-## 📖 Chương 1. Giới thiệu
+## 📖 1. Giới thiệu
 Ứng dụng được xây dựng nhằm mô phỏng quá trình truyền file giữa các máy tính trong mạng thông qua giao thức TCP.  
 Trong mô hình này, **Server** đóng vai trò trung gian, chịu trách nhiệm lắng nghe kết nối từ các **Client**, tiếp nhận dữ liệu (file) từ Client gửi đến và chuyển tiếp cho Client nhận.  
 
@@ -36,7 +36,7 @@ Trong mô hình này, **Server** đóng vai trò trung gian, chịu trách nhi�
 
 ---
 
-## 🛠️ Chương 2: Công nghệ sử dụng  
+## 🛠️ 2. Công nghệ sử dụng  
 
 - **Ngôn ngữ lập trình**: Java (JDK 8+).  
 - **Giao thức mạng**: TCP Socket (`java.net.Socket`, `java.net.ServerSocket`).  
@@ -54,12 +54,13 @@ Trong mô hình này, **Server** đóng vai trò trung gian, chịu trách nhi�
 ---
 
 ## 3. Một số hình ảnh hệ thống
-## 4. Các bước cài đặt
+## ChươngChương 4. Các bước cài đặt
 
 ## 5. Liên hệ cá nhân
 Nếu có bất kỳ thắc mắc hoặc cần hỗ trợ, vui lòng liên hệ:
 
 📧 Email: pthung0709@gmail.com
+
 
 
 
