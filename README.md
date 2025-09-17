@@ -41,14 +41,15 @@ Trong mô hình này, **Server** đóng vai trò trung gian, chịu trách nhi�
 - **Ngôn ngữ lập trình**: Java (JDK 8+).  
 - **Giao thức mạng**: TCP Socket (`java.net.Socket`, `java.net.ServerSocket`).  
 - **Xử lý đa luồng**: `Thread` để phục vụ nhiều Client đồng thời.  
-- **Công nghệ giao diện**: Java Swing.  
-- **Tuần tự hóa đối tượng (Object Serialization)**: truyền file và thông tin qua socket.  
+- **Công nghệ giao diện**: JavaFX (TableView, Button, TextArea, ProgressBar, Scene, Stage).  
+- **Cơ chế truyền dữ liệu**: `DataInputStream` và `DataOutputStream` để truyền file và lệnh (UPLOAD, DOWNLOAD, LIST).  
 - **Thư viện sử dụng**:  
   - `java.net`  
   - `java.io`  
-- **Công cụ phát triển**: Eclipse IDE for Java Developers.  
-- **Phiên bản JDK**: Java SE (JDK 8 trở lên).  
-- **Hệ điều hành**: Windows 10 (có thể chạy đa nền tảng).  
+  - `javafx.application`, `javafx.stage`, `javafx.scene`, `javafx.collections`, `javafx.concurrent`  
+- **Công cụ phát triển**: IntelliJ IDEA / Eclipse / NetBeans (tùy chọn).  
+- **Phiên bản JDK**: Java SE (JDK 8 trở lên, có hỗ trợ JavaFX).  
+- **Hệ điều hành**: Windows 10 (có thể chạy đa nền tảng Linux, macOS).  
 
 ---
 
@@ -56,4 +57,5 @@ Trong mô hình này, **Server** đóng vai trò trung gian, chịu trách nhi�
 ## 4. Các bước cài đặt
 
 ## 5. Liên hệ cá nhân
+
 
