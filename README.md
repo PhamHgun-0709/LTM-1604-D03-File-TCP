@@ -20,10 +20,33 @@
 </div>
 
 
-## 📖 1. Giới thiệu
-Truyền file qua TCP là quá trình gửi và nhận tệp tin giữa client và server thông qua giao thức TCP, đảm bảo dữ liệu được truyền tin cậy, đúng thứ tự và toàn vẹn. Nó thường được dùng trong chia sẻ dữ liệu, lưu trữ đám mây, email hay ứng dụng chat có gửi file. Các chức năng chính gồm: thiết lập kết nối tin cậy, truyền file dung lượng nhỏ đến lớn, kiểm tra và đảm bảo toàn vẹn dữ liệu, hỗ trợ nhiều kết nối, và có thể kết hợp mã hóa để tăng cường bảo mật.
+## 📖 Chương 1. Giới thiệu
+Ứng dụng được xây dựng nhằm mô phỏng quá trình truyền file giữa các máy tính trong mạng thông qua giao thức TCP.  
+Trong mô hình này, **Server** đóng vai trò trung gian, chịu trách nhiệm lắng nghe kết nối từ các **Client**, tiếp nhận dữ liệu (file) từ Client gửi đến và chuyển tiếp cho Client nhận.  
 
-## 2. Công nghệ sử dụng
+**Mục tiêu chính:**  
+- Hiểu rõ cách hoạt động của giao thức TCP trong việc truyền dữ liệu.  
+- Nắm vững cơ chế kết nối Client – Server.  
+- Thực hành xử lý dữ liệu file (gửi/nhận, tuần tự hóa đối tượng).  
+
+**Chức năng cơ bản:**  
+- Gửi file từ một Client lên Server.  
+- Server chuyển tiếp file đến Client khác.  
+- Quản lý nhiều kết nối Client đồng thời.  
+
+---
+
+## 💻 Chương 2. Công nghệ sử dụng
+- **Ngôn ngữ lập trình**: Java (JDK 8+).  
+- **IDE**: Eclipse IDE for Java Developers.  
+- **Mạng**: TCP Socket (`java.net.Socket`, `java.net.ServerSocket`).  
+- **Xử lý đa luồng**: `Thread` để quản lý nhiều Client cùng lúc.  
+- **Tuần tự hóa đối tượng (Object Serialization)**: truyền file hoặc thông tin file qua socket.  
+- **Hệ điều hành**: Windows (có thể chạy đa nền tảng).  
+
+---
+
 ## 3. Một số hình ảnh hệ thống
 ## 4. Các bước cài đặt
+
 ## 5. Liên hệ cá nhân
