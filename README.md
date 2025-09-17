@@ -57,5 +57,8 @@ Trong mô hình này, **Server** đóng vai trò trung gian, chịu trách nhi�
 ## 4. Các bước cài đặt
 
 ## 5. Liên hệ cá nhân
+Nếu có bất kỳ thắc mắc hoặc cần hỗ trợ, vui lòng liên hệ:
+
+📧 Email: pthung0709@gmail.com
 
 
