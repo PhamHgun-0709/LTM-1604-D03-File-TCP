@@ -36,13 +36,19 @@ Trong mô hình này, **Server** đóng vai trò trung gian, chịu trách nhi�
 
 ---
 
-## 💻 Chương 2. Công nghệ sử dụng
+## 🛠️ Chương 2: Công nghệ sử dụng  
+
 - **Ngôn ngữ lập trình**: Java (JDK 8+).  
-- **IDE**: Eclipse IDE for Java Developers.  
-- **Mạng**: TCP Socket (`java.net.Socket`, `java.net.ServerSocket`).  
-- **Xử lý đa luồng**: `Thread` để quản lý nhiều Client cùng lúc.  
-- **Tuần tự hóa đối tượng (Object Serialization)**: truyền file hoặc thông tin file qua socket.  
-- **Hệ điều hành**: Windows (có thể chạy đa nền tảng).  
+- **Giao thức mạng**: TCP Socket (`java.net.Socket`, `java.net.ServerSocket`).  
+- **Xử lý đa luồng**: `Thread` để phục vụ nhiều Client đồng thời.  
+- **Công nghệ giao diện**: Java Swing.  
+- **Tuần tự hóa đối tượng (Object Serialization)**: truyền file và thông tin qua socket.  
+- **Thư viện sử dụng**:  
+  - `java.net`  
+  - `java.io`  
+- **Công cụ phát triển**: Eclipse IDE for Java Developers.  
+- **Phiên bản JDK**: Java SE (JDK 8 trở lên).  
+- **Hệ điều hành**: Windows 10 (có thể chạy đa nền tảng).  
 
 ---
 
@@ -50,3 +56,4 @@ Trong mô hình này, **Server** đóng vai trò trung gian, chịu trách nhi�
 ## 4. Các bước cài đặt
 
 ## 5. Liên hệ cá nhân
+
