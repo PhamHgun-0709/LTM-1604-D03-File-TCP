@@ -27,7 +27,7 @@ Trong mô hình này, **Server** đóng vai trò trung gian, chịu trách nhi�
 **Mục tiêu chính:**  
 - Hiểu rõ cách hoạt động của giao thức TCP trong việc truyền dữ liệu.  
 - Nắm vững cơ chế kết nối Client – Server.  
-- Thực hành xử lý dữ liệu file (gửi/nhận, tuần tự hóa đối tượng).  
+- Thực hành xử lý dữ liệu file (gửi/nhận).  
 
 **Chức năng cơ bản:**  
 - Gửi file từ một Client lên Server.  
@@ -60,5 +60,6 @@ Trong mô hình này, **Server** đóng vai trò trung gian, chịu trách nhi�
 Nếu có bất kỳ thắc mắc hoặc cần hỗ trợ, vui lòng liên hệ:
 
 📧 Email: pthung0709@gmail.com
+
 
 
