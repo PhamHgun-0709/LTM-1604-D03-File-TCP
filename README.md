@@ -60,6 +60,26 @@ Nói cách khác, chương trình cho phép nhiều máy tính trong cùng mạn
 ---
 
 ## 3. Một số hình ảnh hệ thống
+### Giao diện Server
+<p align="center">
+  <img src="docs/Server.png" alt="Server UI" width="800" height="800"/>
+</p>
+<p align="center"><i>Hình ảnh 1</i></p>
+### Giao diện ClientA
+<p align="center">
+  <img src="docs/ClientA.png" alt="Server UI" width="800" height="800"/>
+</p>
+<p align="center"><i>Hình ảnh 2</i></p>
+### Giao diện ClientB
+<p align="center">
+  <img src="docs/ClientB.png" alt="Server UI" width="800" height="800"/>
+</p>
+<p align="center"><i>Hình ảnh 3</i></p>
+### Giao diện Upload 
+<p align="center">
+  <img src="docs/Upload.png" alt="Server UI" width="800" height="800"/>
+</p>
+<p align="center"><i>Hình ảnh 4</i></p>
 ## 4. Các bước cài đặt
 
 ## 5. Liên hệ cá nhân
