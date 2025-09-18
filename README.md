@@ -70,14 +70,14 @@ Nói cách khác, chương trình cho phép nhiều máy tính trong cùng mạn
 ### Giao diện ClientA
 
 <p align="center">
-  <img src="" alt="Server UI" width="800" height="800"/>
+  <img src="" alt="" width="800" height="800"/>
 </p>
 <p align="center"><i>Hình ảnh 2</i></p>
 
 ### Giao diện Upload 
 
 <p align="center">
-  <img src="docs/Upload.png" alt="Server UI" width="800" height="800"/>
+  <img src="docs/Upload.png" alt="" width="800" height="800"/>
 </p>
 <p align="center"><i>Hình ảnh 3</i></p>
 
