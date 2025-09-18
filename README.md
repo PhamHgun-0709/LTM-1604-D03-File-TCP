@@ -126,6 +126,10 @@ Khởi động Client:
 ```bash
 java clienta.ClientA
 ```
+- Hoặc
+```bash
+java clienta.ClientB
+```
 - Client tạo thư mục `client_files` nếu chưa có.
 - Client kết nối đến IP server (`SERVER_IP`) và port `1234`.
 - Giao diện Client hiển thị danh sách file và log quá trình upload/download.
