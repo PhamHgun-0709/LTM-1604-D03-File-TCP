@@ -109,7 +109,7 @@ javac clienta/ClientA.java
 ```
 - Hoặc biên dịch toàn bộ dự án:
 ```bash
-javac Truyen-file-qua-tcp/**/*.java
+javac LTM-1604-D03-File-TCP/**/*.java
 ```
 3. Kiểm tra kết quả: Nếu biên dịch thành công, sẽ tạo ra các file `.class` tương ứng.
 
