@@ -21,18 +21,23 @@
 
 
 ## 📖 1. Giới thiệu
-Ứng dụng được xây dựng nhằm mô phỏng quá trình truyền file giữa các máy tính trong mạng thông qua giao thức TCP.  
-Trong mô hình này, **Server** đóng vai trò trung gian, chịu trách nhiệm lắng nghe kết nối từ các **Client**, tiếp nhận dữ liệu (file) từ Client gửi đến và chuyển tiếp cho Client nhận.  
+Ứng dụng này mô phỏng việc **truyền file qua mạng** bằng mô hình **Client – Server**.  
+
+- **Server**: đóng vai trò trung tâm, nơi lưu trữ các file và lắng nghe yêu cầu từ các Client.  
+- **Client**: có thể upload file lên Server hoặc tải file từ Server về máy.  
+
+Nói cách khác, chương trình cho phép nhiều máy tính trong cùng mạng (hoặc thông qua Internet) **chia sẻ file qua lại** một cách dễ dàng.  
 
 **Mục tiêu chính:**  
-- Hiểu rõ cách hoạt động của giao thức TCP trong việc truyền dữ liệu.  
-- Nắm vững cơ chế kết nối Client – Server.  
-- Thực hành xử lý dữ liệu file (gửi/nhận).  
+- Hiểu nguyên lý hoạt động của giao thức TCP khi truyền dữ liệu.  
+- Làm quen với cách xây dựng kết nối **Client – Server** trong Java.  
+- Thực hành thao tác với file: gửi, nhận, lưu trữ.  
 
-**Chức năng cơ bản:**  
-- Gửi file từ một Client lên Server.  
-- Server lưu trữ và cho phép Client khác tải file về.  
-- Quản lý nhiều kết nối Client đồng thời.  
+**Các chức năng chính:**  
+- Upload file từ Client lên Server.  
+- Download file từ Server về Client.  
+- Server quản lý và hiển thị danh sách file.  
+- Hỗ trợ nhiều Client kết nối cùng lúc.  
 
 ---
 
@@ -61,6 +66,7 @@ Trong mô hình này, **Server** đóng vai trò trung gian, chịu trách nhi�
 Nếu có bất kỳ thắc mắc hoặc cần hỗ trợ, vui lòng liên hệ:
 
 📧 Email: pthung0709@gmail.com
+
 
 
 
