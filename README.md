@@ -152,7 +152,7 @@ Nếu có bất kỳ thắc mắc hoặc cần hỗ trợ, vui lòng liên hệ:
 - 🏫 Khoa: Công nghệ thông tin - Đại học Đại Nam
 - 📧 Email: pthung0709@gmail.com
 
-
+© 2025 AIoTLab, Faculty of Information Technology, DaiNam University. All rights reserved.
 
 
 
