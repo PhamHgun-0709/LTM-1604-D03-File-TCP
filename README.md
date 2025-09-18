@@ -31,7 +31,7 @@ Trong mô hình này, **Server** đóng vai trò trung gian, chịu trách nhi�
 
 **Chức năng cơ bản:**  
 - Gửi file từ một Client lên Server.  
-- Server chuyển tiếp file đến Client khác.  
+- Server lưu trữ và cho phép Client khác tải file về.  
 - Quản lý nhiều kết nối Client đồng thời.  
 
 ---
@@ -41,15 +41,16 @@ Trong mô hình này, **Server** đóng vai trò trung gian, chịu trách nhi�
 - **Ngôn ngữ lập trình**: Java (JDK 8+).  
 - **Giao thức mạng**: TCP Socket (`java.net.Socket`, `java.net.ServerSocket`).  
 - **Xử lý đa luồng**: `Thread` để phục vụ nhiều Client đồng thời.  
-- **Công nghệ giao diện**: JavaFX (TableView, Button, TextArea, ProgressBar, Scene, Stage).  
+- **Công nghệ giao diện**: Java Swing (JTable, JButton, JTextArea, JSplitPane).  
 - **Cơ chế truyền dữ liệu**: `DataInputStream` và `DataOutputStream` để truyền file và lệnh (UPLOAD, DOWNLOAD, LIST).  
 - **Thư viện sử dụng**:  
   - `java.net`  
   - `java.io`  
-  - `javafx.application`, `javafx.stage`, `javafx.scene`, `javafx.collections`, `javafx.concurrent`  
+  - `javax.swing`, `java.awt`  
 - **Công cụ phát triển**: IntelliJ IDEA / Eclipse / NetBeans (tùy chọn).  
-- **Phiên bản JDK**: Java SE (JDK 8 trở lên, có hỗ trợ JavaFX).  
+- **Phiên bản JDK**: Java SE (JDK 8 trở lên).  
 - **Hệ điều hành**: Windows 10 (có thể chạy đa nền tảng Linux, macOS).  
+
 
 ---
 
@@ -60,6 +61,7 @@ Trong mô hình này, **Server** đóng vai trò trung gian, chịu trách nhi�
 Nếu có bất kỳ thắc mắc hoặc cần hỗ trợ, vui lòng liên hệ:
 
 📧 Email: pthung0709@gmail.com
+
 
 
 
