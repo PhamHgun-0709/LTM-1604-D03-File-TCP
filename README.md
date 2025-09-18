@@ -140,6 +140,7 @@ java clienta.ClientB
 3. Download file: Client có thể chọn file trên Server để download về máy.
 4. Lưu file: File sẽ được lưu vào thư mục client_files của Client.
 5. Ngắt kết nối: Đóng cửa sổ Client hoặc nhấn Ctrl+C để ngắt kết nối.
+6. Reconnect: Client yêu cầu kết nối lại tới Server.
 
 ---
 
