@@ -5,6 +5,10 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
+<<<<<<< HEAD
 	<classpathentry kind="src" path="Server"/>
+=======
+	<classpathentry kind="src" path="Client"/>
+>>>>>>> 872064b440eb6c11a39cdf04bc10bf66d7077b22
 	<classpathentry kind="output" path="bin"/>
 </classpath>

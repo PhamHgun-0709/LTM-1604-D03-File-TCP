@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
+<<<<<<< HEAD
 	<name>Server2</name>
+=======
+	<name>Client</name>
+>>>>>>> 872064b440eb6c11a39cdf04bc10bf66d7077b22
 	<comment></comment>
 	<projects>
 	</projects>
