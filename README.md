@@ -135,6 +135,7 @@ java clienta.ClientB
 - Giao diện Client hiển thị danh sách file và log quá trình upload/download.
 
 ### 🚀 Sử dụng ứng dụng
+1. Bật Server: Server sẵn sàng nhận kết nối từ Client
 1. Kết nối: Client kết nối đến Server và log trên Server hiển thị các Client đang kết nối.
 2. Upload file: Trên Client, chọn file từ máy nhấn Upload để gửi file lên Server, tiến trình hiển thị trên ProgressBar.
 3. Download file: Client có thể chọn file trên Server để download về máy.
