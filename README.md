@@ -59,7 +59,7 @@ Nói cách khác, chương trình cho phép nhiều máy tính trong cùng mạn
 
 ---
 
-## 3. Một số hình ảnh hệ thống
+## 🚀 3. Một số hình ảnh hệ thống
 ### Giao diện Server
 <p align="center">
   <img src="docs/Server.png" alt="Server UI" width="800" height="800"/>
@@ -80,7 +80,57 @@ Nói cách khác, chương trình cho phép nhiều máy tính trong cùng mạn
   <img src="docs/Upload.png" alt="Server UI" width="800" height="800"/>
 </p>
 <p align="center"><i>Hình ảnh 4</i></p>
-## 4. Các bước cài đặt
+
+---
+
+## 📝 4. Các bước cài đặt
+
+#### Bước 1: Chuẩn bị môi trường
+1. **Kiểm tra Java**: Mở terminal/command prompt và chạy:
+```bash
+java -version
+javac -version
+```
+Đảm bảo cả hai lệnh đều hiển thị phiên bản Java 8 trở lên.
+
+#### Bước 2: Biên dịch mã nguồn
+1. Mở terminal và điều hướng đến thư mục chứa mã nguồn.
+2. Biên dịch các file Java:
+```bash
+javac server/Server.java
+javac clienta/ClientA.java
+```
+- Hoặc biên dịch toàn bộ dự án:
+```bash
+javac Truyen-file-qua-tcp/**/*.java
+```
+3. Kiểm tra kết quả: Nếu biên dịch thành công, sẽ tạo ra các file `.class` tương ứng.
+
+#### Bước 3: Chạy ứng dụng
+Khởi động Server:
+```bash
+java server.Server
+```
+- Server sẽ tạo thư mục `server_files` nếu chưa có.
+- Server lắng nghe kết nối TCP trên port `1234`.
+- Giao diện server hiển thị danh sách file và log kết nối từ các Client.
+
+Khởi động Client:
+```bash
+java clienta.ClientA
+```
+- Client tạo thư mục `client_files` nếu chưa có.
+- Client kết nối đến IP server (`SERVER_IP`) và port `1234`.
+- Giao diện Client hiển thị danh sách file và log quá trình upload/download.
+
+### 🚀 Sử dụng ứng dụng
+1. Kết nối: Client kết nối đến Server và log trên Server hiển thị các Client đang kết nối.
+2. Upload file: Trên Client, chọn file từ máy nhấn Upload để gửi file lên Server, tiến trình hiển thị trên ProgressBar.
+3. Download file: Client có thể chọn file trên Server để download về máy.
+4. Lưu file: File sẽ được lưu vào thư mục client_files của Client.
+5. Ngắt kết nối: Đóng cửa sổ Client hoặc nhấn Ctrl+C để ngắt kết nối.
+
+---
 
 ## 5. Liên hệ cá nhân
 Nếu có bất kỳ thắc mắc hoặc cần hỗ trợ, vui lòng liên hệ:
