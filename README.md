@@ -21,41 +21,34 @@
 
 
 ## 📖 1. Giới thiệu
-Ứng dụng này mô phỏng việc **truyền file qua mạng** bằng mô hình **Client – Server**.  
+Ứng dụng này mô phỏng việc **truyền file qua mạng** bằng mô hình **Client – Server P2P**.  
 
-- **Server**: đóng vai trò trung tâm, nơi lưu trữ các file và lắng nghe yêu cầu từ các Client.  
-- **Client**: có thể upload file lên Server hoặc tải file từ Server về máy.  
-
-Nói cách khác, chương trình cho phép nhiều máy tính trong cùng mạng (hoặc thông qua Internet) **chia sẻ file qua lại** một cách dễ dàng.  
+- **Server**: lắng nghe các client kết nối, quản lý danh sách client và trung gian truyền file giữa các client.  
+- **Client**: gửi file tới client khác hoặc nhận file từ client khác thông qua server.  
 
 **Mục tiêu chính:**  
 - Hiểu nguyên lý hoạt động của giao thức TCP khi truyền dữ liệu.  
-- Làm quen với cách xây dựng kết nối **Client – Server** trong Java.  
+- Làm quen cách xây dựng kết nối **Client – Server** trong Java.  
 - Thực hành thao tác với file: gửi, nhận, lưu trữ.  
 
 **Các chức năng chính:**  
-- Upload file từ Client lên Server.  
-- Download file từ Server về Client.  
-- Server quản lý và hiển thị danh sách file.  
-- Hỗ trợ nhiều Client kết nối cùng lúc.  
+- Gửi file từ Client → Client khác thông qua Server.  
+- Nhận file từ Client khác, đồng ý hoặc từ chối.  
+- Cập nhật danh sách client online theo thời gian thực.  
+- Hỗ trợ nhiều client kết nối đồng thời.  
 
 ---
 
 ## 🛠️ 2. Công nghệ sử dụng  
 
-- **Ngôn ngữ lập trình**: Java (JDK 8+).  
-- **Giao thức mạng**: TCP Socket (`java.net.Socket`, `java.net.ServerSocket`).  
-- **Xử lý đa luồng**: `Thread` để phục vụ nhiều Client đồng thời.  
-- **Công nghệ giao diện**: Java Swing (JTable, JButton, JTextArea, JSplitPane).  
-- **Cơ chế truyền dữ liệu**: `DataInputStream` và `DataOutputStream` để truyền file và lệnh (UPLOAD, DOWNLOAD, LIST).  
-- **Thư viện sử dụng**:  
-  - `java.net`  
-  - `java.io`  
-  - `javax.swing`, `java.awt`  
-- **Công cụ phát triển**: IntelliJ IDEA / Eclipse / NetBeans (tùy chọn).  
-- **Phiên bản JDK**: Java SE (JDK 8 trở lên).  
-- **Hệ điều hành**: Windows 10 (có thể chạy đa nền tảng Linux, macOS).  
-
+- **Ngôn ngữ lập trình:** Java  
+- **Mạng & Giao thức:** TCP, Socket (`java.net.Socket`, `java.net.ServerSocket`)  
+- **Xử lý dữ liệu:** `DataInputStream`, `DataOutputStream`, `FileInputStream`, `FileOutputStream`  
+- **Giao diện người dùng (GUI):** Java Swing (`JFrame`, `JPanel`, `JTextArea`, `JButton`, `JLabel`, `JFileChooser`, `JTabbedPane`, `JList`)  
+- **Layout managers:** BorderLayout, FlowLayout, GridBagLayout  
+- **Look & Feel:** Nimbus  
+- **Đa luồng:** Thread (xử lý client song song trên server và lắng nghe server trên client)  
+- **Quản lý file & thư mục:** Thư mục `ReceivedFiles` để lưu file nhận được  
 
 ---
 
@@ -63,23 +56,51 @@ Nói cách khác, chương trình cho phép nhiều máy tính trong cùng mạn
 ### Giao diện Server
 
 <p align="center">
-  <img src="docs/Server.png" alt="Server UI" width="800" height="800"/>
+  <img src="docs/Server.png" alt="Server" width="800" height="800"/>
 </p>
 <p align="center"><i>Hình ảnh 1</i></p>
 
-### Giao diện ClientA
+### Giao diện Client
 
 <p align="center">
-  <img src="" alt="" width="800" height="800"/>
+  <img src="docs/Client.png" alt="Client" width="800" height="800"/>
 </p>
 <p align="center"><i>Hình ảnh 2</i></p>
 
-### Giao diện Upload 
+### Danh sách Client online 
 
 <p align="center">
-  <img src="docs/Upload.png" alt="" width="800" height="800"/>
+  <img src="docs/Online.png" alt="Online" width="800" height="800"/>
 </p>
 <p align="center"><i>Hình ảnh 3</i></p>
+
+### Chọn file để gửi
+
+<p align="center">
+  <img src="docs/Choose.png" alt="Choose" width="800" height="800"/>
+</p>
+<p align="center"><i>Hình ảnh 4</i></p>
+
+### Nhận file từ client khác 
+
+<p align="center">
+  <img src="docs/Upload.png" alt="Upload" width="800" height="800"/>
+</p>
+<p align="center"><i>Hình ảnh 5</i></p>
+
+### Đồng ý nhận file 
+
+<p align="center">
+  <img src="docs/Dongy.png" alt="Dongy" width="800" height="800"/>
+</p>
+<p align="center"><i>Hình ảnh 6</i></p>
+
+### Từ chối nhận file 
+
+<p align="center">
+  <img src="docs/Tuchoi.png" alt="Tuchoi" width="800" height="800"/>
+</p>
+<p align="center"><i>Hình ảnh 7</i></p>
 
 ---
 
@@ -98,7 +119,7 @@ javac -version
 2. Biên dịch các file Java:
 ```bash
 javac server/Server.java
-javac clienta/ClientA.java
+javac clienta/Client.java
 ```
 - Hoặc biên dịch toàn bộ dự án:
 ```bash
@@ -111,30 +132,25 @@ Khởi động Server:
 ```bash
 java server.Server
 ```
-- Server sẽ tạo thư mục `server_files` nếu chưa có.
-- Server lắng nghe kết nối TCP trên port `1234`.
-- Giao diện server hiển thị danh sách file và log kết nối từ các Client.
+- Server lắng nghe kết nối TCP trên port 12345.
+- Giao diện server hiển thị danh sách client và log các kết nối.
 
 Khởi động Client:
+
 ```bash
-java clienta.ClientA
+java client.Client
 ```
-- Hoặc
-```bash
-java clienta.ClientB
-```
-- Client tạo thư mục `client_files` nếu chưa có.
-- Client kết nối đến IP server (`SERVER_IP`) và port `1234`.
-- Giao diện Client hiển thị danh sách file và log quá trình upload/download.
+- Nhập ID của client và IP server (mặc định localhost) để kết nối.
+- Giao diện Client hiển thị log, danh sách online, chọn file và gửi file.
 
 ### 🚀 Sử dụng ứng dụng
-1. Bật Server: Server sẵn sàng nhận kết nối từ Client
-1. Kết nối: Client kết nối đến Server và log trên Server hiển thị các Client đang kết nối.
-2. Upload file: Trên Client, chọn file từ máy nhấn Upload để gửi file lên Server, tiến trình hiển thị trên ProgressBar.
-3. Download file: Client có thể chọn file trên Server để download về máy.
-4. Lưu file: File sẽ được lưu vào thư mục client_files của Client.
-5. Ngắt kết nối: Đóng cửa sổ Client hoặc nhấn Ctrl+C để ngắt kết nối.
-6. Reconnect: Client yêu cầu kết nối lại tới Server.
+1. Bật Server: Server sẵn sàng nhận kết nối từ Client.
+2. Kết nối: Client kết nối đến Server, log hiển thị các client đang online.
+3. Gửi file: Client nhập ID người nhận, chọn file và gửi.
+4. Nhận file: Client khác đồng ý hoặc từ chối nhận file.
+5. Kiểm tra lịch sử gửi/nhận file.
+6. Ngắt kết nối: Client có thể ngắt kết nối với Server.
+7. Dừng Server: Server sẽ ngừng lắng nghe các client.
 
 ---
 
