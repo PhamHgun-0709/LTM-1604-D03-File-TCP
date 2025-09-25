@@ -19,36 +19,42 @@
 
 </div>
 
+---
 
 ## 📖 1. Giới thiệu
-Ứng dụng này mô phỏng việc **truyền file qua mạng** bằng mô hình **Client – Server P2P**.  
+Ứng dụng này mô phỏng việc **truyền file qua mạng** bằng mô hình **Client – Server**.  
 
-- **Server**: lắng nghe các client kết nối, quản lý danh sách client và trung gian truyền file giữa các client.  
-- **Client**: gửi file tới client khác hoặc nhận file từ client khác thông qua server.  
+- **Server**: Lắng nghe client kết nối, xác thực tài khoản (login/register qua MySQL), quản lý danh sách client và làm trung gian truyền file.  
+- **Client**: Có 2 phần chính:
+  - `LoginUI`: Đăng nhập hoặc đăng ký với server.  
+  - `ClientUI`: Sau khi đăng nhập thành công, cho phép gửi/nhận file.  
 
 **Mục tiêu chính:**  
 - Hiểu nguyên lý hoạt động của giao thức TCP khi truyền dữ liệu.  
-- Làm quen cách xây dựng kết nối **Client – Server** trong Java.  
-- Thực hành thao tác với file: gửi, nhận, lưu trữ.  
+- Xây dựng ứng dụng Java Swing kết nối Client – Server.  
+- Thực hành thao tác với CSDL MySQL, Socket và xử lý file.  
 
 **Các chức năng chính:**  
-- Gửi file từ Client → Client khác thông qua Server.  
+- Đăng ký và đăng nhập tài khoản.  
+- Gửi file từ một Client → Client khác thông qua Server.  
 - Nhận file từ Client khác, đồng ý hoặc từ chối.  
 - Cập nhật danh sách client online theo thời gian thực.  
-- Hỗ trợ nhiều client kết nối đồng thời.  
+- Quản lý nhiều client kết nối đồng thời.  
 
 ---
 
 ## 🛠️ 2. Công nghệ sử dụng  
 
-- **Ngôn ngữ lập trình:** Java  
-- **Mạng & Giao thức:** TCP, Socket (`java.net.Socket`, `java.net.ServerSocket`)  
-- **Xử lý dữ liệu:** `DataInputStream`, `DataOutputStream`, `FileInputStream`, `FileOutputStream`  
-- **Giao diện người dùng (GUI):** Java Swing (`JFrame`, `JPanel`, `JTextArea`, `JButton`, `JLabel`, `JFileChooser`, `JTabbedPane`, `JList`)  
-- **Layout managers:** BorderLayout, FlowLayout, GridBagLayout  
-- **Look & Feel:** Nimbus  
-- **Đa luồng:** Thread (xử lý client song song trên server và lắng nghe server trên client)  
-- **Quản lý file & thư mục:** Thư mục `ReceivedFiles` để lưu file nhận được  
+<p align="center">
+  <img src="https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white"/>
+  <img src="https://img.shields.io/badge/JDK-8%2B-green?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/TCP%20Protocol-808080?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Socket-0078D7?style=for-the-badge&logo=socket.io&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Network-1E90FF?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Java%20Swing-8A2BE2?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/FlatLaf-2F4F4F?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white"/>
+</p>
 
 ---
 
@@ -56,119 +62,109 @@
 ### Giao diện đăng nhập và đăng ký
 
 <p align="center">
-  <img src="docs/login.png" alt="Login" width="600" height="600"/>
+  <img src="docs/Login.png" alt="Login" width="500"/>
 </p>
-<p align="center"><i>Hình ảnh 1</i></p>
 
 ### Giao diện Server
 
 <p align="center">
-  <img src="docs/Server.png" alt="Server" width="600" height="600"/>
+  <img src="docs/Server.png" alt="Server" width="600"/>
 </p>
-<p align="center"><i>Hình ảnh 2</i></p>
 
 ### Giao diện Client
 
 <p align="center">
-  <img src="docs/Client.png" alt="Client" width="600" height="600"/>
+  <img src="docs/Client.png" alt="Client" width="600"/>
 </p>
-<p align="center"><i>Hình ảnh 3</i></p>
-
-### Danh sách Client online 
-
-<p align="center">
-  <img src="docs/Online.png" alt="Online" width="600" height="600"/>
-</p>
-<p align="center"><i>Hình ảnh 4</i></p>
 
 ### Chọn file để gửi
 
 <p align="center">
-  <img src="docs/Choose.png" alt="Choose" width="600" height="600"/>
+  <img src="docs/Choose.png" alt="Choose" width="300"/>
+  <img src="docs/Choose2.png" alt="Choose2" width="300"/>
 </p>
-<p align="center"><i>Hình ảnh 5</i></p>
 
 ### Nhận file từ client khác 
 
 <p align="center">
-  <img src="docs/Upload.png" alt="Upload" width="600" height="600"/>
+  <img src="docs/Upload.png" alt="Upload" width="600"/>
 </p>
-<p align="center"><i>Hình ảnh 6</i></p>
 
 ### Đồng ý nhận file 
 
 <p align="center">
-  <img src="docs/Dongy.png" alt="Dongy" width="600" height="600"/>
+  <img src="docs/Dongy.png" alt="Dongy" width="500"/>
 </p>
-<p align="center"><i>Hình ảnh 7</i></p>
 
 ### Từ chối nhận file 
 
 <p align="center">
-  <img src="docs/Tuchoi.png" alt="Tuchoi" width="600" height="600"/>
+  <img src="docs/Tuchoi.png" alt="Tuchoi" width="500"/>
 </p>
-<p align="center"><i>Hình ảnh 8</i></p>
 
 ---
 
 ## 📝 4. Các bước cài đặt
 
 #### Bước 1: Chuẩn bị môi trường
-1. **Kiểm tra Java**: Mở terminal/command prompt và chạy:
-```bash
-java -version
-javac -version
-```
-Đảm bảo cả hai lệnh đều hiển thị phiên bản Java 8 trở lên.
+1. **Cài đặt Java JDK** (phiên bản 8 trở lên).  
+   Kiểm tra bằng lệnh:
+   ```bash
+   java -version
+   javac -version
+  ```
 
-#### Bước 2: Biên dịch mã nguồn
-1. Mở terminal và điều hướng đến thư mục chứa mã nguồn.
-2. Biên dịch các file Java:
+2. **Cài đặt MySQL và tạo CSDL mới:**
 ```bash
-javac server/Server.java
-javac clienta/Client.java
+CREATE DATABASE `ltm-1604-d03-file-tcp`;
 ```
-- Hoặc biên dịch toàn bộ dự án:
+
+#### Bước 2: Cấu hình Database
+- Chỉnh sửa thông tin kết nối trong file `sql/SQL.java`:
 ```bash
-javac LTM-1604-D03-File-TCP/**/*.java
+private static final String URL = "jdbc:mysql://localhost:3306/ltm-1604-d03-file-tcp";
+private static final String USER = "root";
+private static final String PASSWORD = "your_password_here";
 ```
-3. Kiểm tra kết quả: Nếu biên dịch thành công, sẽ tạo ra các file `.class` tương ứng.
+- Chạy server lần đầu để tự động tạo bảng `users`.
 
-#### Bước 3: Chạy ứng dụng
-Khởi động Server:
+#### Bước 3: Biên dịch mã nguồn
+- Mở terminal, điều hướng đến thư mục project và chạy:
 ```bash
-java server.Server
+javac server/Server.java client/LoginUI.java client/Client.java sql/SQL.java
 ```
-- Server lắng nghe kết nối TCP trên port 12345.
-- Giao diện server hiển thị danh sách client và log các kết nối.
+#### Bước 4: Chạy ứng dụng
+1. Khởi động Server:
+  ```bash
+  java server.Server
+  ```
+- Server sẽ mở port 12345.
+- Kết nối tới MySQL, tạo bảng users nếu chưa có.
+2. Khởi động Client (LoginUI):
+  ```bash
+  java client.LoginUI
+  ```
+- Người dùng nhập tên đăng nhập + mật khẩu để login/register.
+- Nếu thành công → mở giao diện Client.
 
-Khởi động Client:
-
-```bash
-java client.Client
-```
-- Nhập ID của client và IP server (mặc định localhost) để kết nối.
-- Giao diện Client hiển thị log, danh sách online, chọn file và gửi file.
-
-### 🚀 Sử dụng ứng dụng
-1. Bật Server: Server sẵn sàng nhận kết nối từ Client.
-2. Kết nối: Client kết nối đến Server, log hiển thị các client đang online.
-3. Gửi file: Client nhập ID người nhận, chọn file và gửi.
-4. Nhận file: Client khác đồng ý hoặc từ chối nhận file.
-5. Kiểm tra lịch sử gửi/nhận file.
-6. Ngắt kết nối: Client có thể ngắt kết nối với Server.
-7. Dừng Server: Server sẽ ngừng lắng nghe các client.
+3. Gửi/Nhận File:
+- Client nhập ID người nhận, chọn file và gửi.
+- Người nhận sẽ thấy thông báo, có thể Đồng ý hoặc Từ chối.
+- File được lưu mặc định trong thư mục downloads/.
 
 ---
 
 ## 📌 5. Liên hệ cá nhân
 Nếu có bất kỳ thắc mắc hoặc cần hỗ trợ, vui lòng liên hệ:
 
-- 👨‍🎓 Họ và tên: Phạm Thành Hưng
-- 🏫 Khoa: Công nghệ thông tin - Trường Đại học Đại Nam
-- 📧 Email: pthung0709@gmail.com
+- Họ và tên: Phạm Thành Hưng
+- Lớp: CNTT 16-04
+- Khoa: Công nghệ thông tin - Trường Đại học Đại Nam
+- Email: pthung0709@gmail.com
 
 © 2025 AIoTLab, Faculty of Information Technology, DaiNam University. All rights reserved.
+
+
 
 
 
