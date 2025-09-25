@@ -104,51 +104,51 @@
 
 ## 📝 4. Các bước cài đặt
 
-#### Bước 1: Chuẩn bị môi trường
-1. **Kiểm tra Java**: Mở terminal/command prompt và chạy:
-```bash
-java -version
-javac -version
-```
-Đảm bảo cả hai lệnh đều hiển thị phiên bản Java 8 trở lên.
+### Bước 1: Chuẩn bị môi trường
+1. **Cài đặt Java JDK** (phiên bản 8 trở lên).  
+   Kiểm tra bằng lệnh:
+   ```bash
+   java -version
+   javac -version
+  ```
 
-#### Bước 2: Biên dịch mã nguồn
-1. Mở terminal và điều hướng đến thư mục chứa mã nguồn.
-2. Biên dịch các file Java:
+2. **Cài đặt MySQL và tạo CSDL mới:**
 ```bash
-javac server/Server.java
-javac clienta/Client.java
+CREATE DATABASE `ltm-1604-d03-file-tcp`;
 ```
-- Hoặc biên dịch toàn bộ dự án:
+
+#### Bước 2: Cấu hình Database
+- Chỉnh sửa thông tin kết nối trong file `sql/SQL.java`:
 ```bash
-javac LTM-1604-D03-File-TCP/**/*.java
+private static final String URL = "jdbc:mysql://localhost:3306/ltm-1604-d03-file-tcp";
+private static final String USER = "root";
+private static final String PASSWORD = "your_password_here";
 ```
-3. Kiểm tra kết quả: Nếu biên dịch thành công, sẽ tạo ra các file `.class` tương ứng.
+- Chạy server lần đầu để tự động tạo bảng `users`.
 
-#### Bước 3: Chạy ứng dụng
-Khởi động Server:
+#### Bước 3: Biên dịch mã nguồn
+- Mở terminal, điều hướng đến thư mục project và chạy:
 ```bash
-java server.Server
+javac server/Server.java client/LoginUI.java client/Client.java sql/SQL.java
 ```
-- Server lắng nghe kết nối TCP trên port 12345.
-- Giao diện server hiển thị danh sách client và log các kết nối.
+#### Bước 4: Chạy ứng dụng
+1. Khởi động Server:
+  ```bash
+  java server.Server
+  ```
+- Server sẽ mở port 12345.
+- Kết nối tới MySQL, tạo bảng users nếu chưa có.
+2. Khởi động Client (LoginUI):
+  ```bash
+  java client.LoginUI
+  ```
+- Người dùng nhập tên đăng nhập + mật khẩu để login/register.
+- Nếu thành công → mở giao diện Client.
 
-Khởi động Client:
-
-```bash
-java client.Client
-```
-- Nhập ID của client và IP server (mặc định localhost) để kết nối.
-- Giao diện Client hiển thị log, danh sách online, chọn file và gửi file.
-
-### 🚀 Sử dụng ứng dụng
-1. Bật Server: Server sẵn sàng nhận kết nối từ Client.
-2. Kết nối: Client kết nối đến Server, log hiển thị các client đang online.
-3. Gửi file: Client nhập ID người nhận, chọn file và gửi.
-4. Nhận file: Client khác đồng ý hoặc từ chối nhận file.
-5. Kiểm tra lịch sử gửi/nhận file.
-6. Ngắt kết nối: Client có thể ngắt kết nối với Server.
-7. Dừng Server: Server sẽ ngừng lắng nghe các client.
+3. Gửi/Nhận File:
+- Client nhập ID người nhận, chọn file và gửi.
+- Người nhận sẽ thấy thông báo, có thể Đồng ý hoặc Từ chối.
+- File được lưu mặc định trong thư mục downloads/.
 
 ---
 
