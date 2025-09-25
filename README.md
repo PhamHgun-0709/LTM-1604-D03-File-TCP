@@ -60,7 +60,7 @@
 ### Giao diện đăng nhập và đăng ký
 
 <p align="center">
-  <img src="docs/login.png" alt="Login" width="500"/>
+  <img src="docs/Login.png" alt="Login" width="500"/>
 </p>
 
 ### Giao diện Server
