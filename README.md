@@ -19,23 +19,27 @@
 
 </div>
 
+---
 
 ## 📖 1. Giới thiệu
-Ứng dụng này mô phỏng việc **truyền file qua mạng** bằng mô hình **Client – Server P2P**.  
+Ứng dụng này mô phỏng việc **truyền file qua mạng** bằng mô hình **Client – Server**.  
 
-- **Server**: lắng nghe các client kết nối, quản lý danh sách client và trung gian truyền file giữa các client.  
-- **Client**: gửi file tới client khác hoặc nhận file từ client khác thông qua server.  
+- **Server**: Lắng nghe client kết nối, xác thực tài khoản (login/register qua MySQL), quản lý danh sách client và làm trung gian truyền file.  
+- **Client**: Có 2 phần chính:
+  - `LoginUI`: Đăng nhập hoặc đăng ký với server.  
+  - `ClientUI`: Sau khi đăng nhập thành công, cho phép gửi/nhận file.  
 
 **Mục tiêu chính:**  
 - Hiểu nguyên lý hoạt động của giao thức TCP khi truyền dữ liệu.  
-- Làm quen cách xây dựng kết nối **Client – Server** trong Java.  
-- Thực hành thao tác với file: gửi, nhận, lưu trữ.  
+- Xây dựng ứng dụng Java Swing kết nối Client – Server.  
+- Thực hành thao tác với CSDL MySQL, Socket và xử lý file.  
 
 **Các chức năng chính:**  
-- Gửi file từ Client → Client khác thông qua Server.  
+- Đăng ký và đăng nhập tài khoản.  
+- Gửi file từ một Client → Client khác thông qua Server.  
 - Nhận file từ Client khác, đồng ý hoặc từ chối.  
 - Cập nhật danh sách client online theo thời gian thực.  
-- Hỗ trợ nhiều client kết nối đồng thời.  
+- Quản lý nhiều client kết nối đồng thời.  
 
 ---
 
@@ -43,12 +47,12 @@
 
 - **Ngôn ngữ lập trình:** Java  
 - **Mạng & Giao thức:** TCP, Socket (`java.net.Socket`, `java.net.ServerSocket`)  
-- **Xử lý dữ liệu:** `DataInputStream`, `DataOutputStream`, `FileInputStream`, `FileOutputStream`  
-- **Giao diện người dùng (GUI):** Java Swing (`JFrame`, `JPanel`, `JTextArea`, `JButton`, `JLabel`, `JFileChooser`, `JTabbedPane`, `JList`)  
-- **Layout managers:** BorderLayout, FlowLayout, GridBagLayout  
-- **Look & Feel:** Nimbus  
-- **Đa luồng:** Thread (xử lý client song song trên server và lắng nghe server trên client)  
-- **Quản lý file & thư mục:** Thư mục `ReceivedFiles` để lưu file nhận được  
+- **Luồng dữ liệu:** `DataInputStream`, `DataOutputStream`  
+- **Xử lý file:** `FileInputStream`, `FileOutputStream`  
+- **Giao diện người dùng:** Java Swing (`JFrame`, `JPanel`, `JTextArea`, `JButton`, `JFileChooser`, `JLabel`, `JOptionPane`)  
+- **CSDL:** MySQL (bảng `users`)  
+- **JDBC Driver:** `com.mysql.cj.jdbc.Driver`  
+- **Đa luồng:** `Thread` (xử lý client song song trên server, lắng nghe server trên client)  
 
 ---
 
@@ -56,52 +60,45 @@
 ### Giao diện đăng nhập và đăng ký
 
 <p align="center">
-  <img src="docs/login.png" alt="Login" width="600" height="600"/>
+  <img src="docs/login.png" alt="Login" width="500"/>
 </p>
-<p align="center"><i>Hình ảnh 1</i></p>
 
 ### Giao diện Server
 
 <p align="center">
-  <img src="docs/Server.png" alt="Server" width="600" height="600"/>
+  <img src="docs/Server.png" alt="Server" width="600"/>
 </p>
-<p align="center"><i>Hình ảnh 2</i></p>
 
 ### Giao diện Client
 
 <p align="center">
-  <img src="docs/Client.png" alt="Client" width="600" height="600"/>
+  <img src="docs/Client.png" alt="Client" width="600"/>
 </p>
-<p align="center"><i>Hình ảnh 3</i></p>
 
 ### Chọn file để gửi
 
 <p align="center">
-  <img src="docs/Choose.png" alt="Choose" width="300" height="300"/>
-  <img src="docs/Choose2.png" alt="Choose" width="300" height="300"/>
+  <img src="docs/Choose.png" alt="Choose" width="300"/>
+  <img src="docs/Choose2.png" alt="Choose2" width="300"/>
 </p>
-<p align="center"><i>Hình ảnh 4</i></p>
 
 ### Nhận file từ client khác 
 
 <p align="center">
-  <img src="docs/Upload.png" alt="Upload" width="600" height="600"/>
+  <img src="docs/Upload.png" alt="Upload" width="600"/>
 </p>
-<p align="center"><i>Hình ảnh 5</i></p>
 
 ### Đồng ý nhận file 
 
 <p align="center">
-  <img src="docs/Dongy.png" alt="Dongy" width="600" height="600"/>
+  <img src="docs/Dongy.png" alt="Dongy" width="500"/>
 </p>
-<p align="center"><i>Hình ảnh 6</i></p>
 
 ### Từ chối nhận file 
 
 <p align="center">
-  <img src="docs/Tuchoi.png" alt="Tuchoi" width="600" height="600"/>
+  <img src="docs/Tuchoi.png" alt="Tuchoi" width="500"/>
 </p>
-<p align="center"><i>Hình ảnh 7</i></p>
 
 ---
 
