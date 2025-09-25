@@ -45,14 +45,16 @@
 
 ## 🛠️ 2. Công nghệ sử dụng  
 
-- **Ngôn ngữ lập trình:** Java  
-- **Mạng & Giao thức:** TCP, Socket (`java.net.Socket`, `java.net.ServerSocket`)  
-- **Luồng dữ liệu:** `DataInputStream`, `DataOutputStream`  
-- **Xử lý file:** `FileInputStream`, `FileOutputStream`  
-- **Giao diện người dùng:** Java Swing (`JFrame`, `JPanel`, `JTextArea`, `JButton`, `JFileChooser`, `JLabel`, `JOptionPane`)  
-- **CSDL:** MySQL (bảng `users`)  
-- **JDBC Driver:** `com.mysql.cj.jdbc.Driver`  
-- **Đa luồng:** `Thread` (xử lý client song song trên server, lắng nghe server trên client)  
+<p align="center">
+  <img src="https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white"/>
+  <img src="https://img.shields.io/badge/JDK-8%2B-green?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/TCP%20Protocol-808080?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Socket-0078D7?style=for-the-badge&logo=socket.io&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Network-1E90FF?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Java%20Swing-8A2BE2?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/FlatLaf-2F4F4F?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white"/>
+</p>
 
 ---
 
