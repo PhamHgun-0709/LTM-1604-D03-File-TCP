@@ -154,7 +154,7 @@ java client.Client
 
 ---
 
-## 5. Liên hệ cá nhân
+## 📌 5. Liên hệ cá nhân
 Nếu có bất kỳ thắc mắc hoặc cần hỗ trợ, vui lòng liên hệ:
 
 - 👨‍🎓 Họ và tên: Phạm Thành Hưng
@@ -162,6 +162,7 @@ Nếu có bất kỳ thắc mắc hoặc cần hỗ trợ, vui lòng liên hệ:
 - 📧 Email: pthung0709@gmail.com
 
 © 2025 AIoTLab, Faculty of Information Technology, DaiNam University. All rights reserved.
+
 
 
 
