@@ -104,7 +104,7 @@
 
 ## 📝 4. Các bước cài đặt
 
-### Bước 1: Chuẩn bị môi trường
+#### Bước 1: Chuẩn bị môi trường
 1. **Cài đặt Java JDK** (phiên bản 8 trở lên).  
    Kiểm tra bằng lệnh:
    ```bash
