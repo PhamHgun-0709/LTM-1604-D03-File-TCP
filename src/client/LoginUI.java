@@ -1,6 +1,7 @@
 package client;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -13,33 +14,58 @@ public class LoginUI extends JFrame {
     private JButton btnLogin, btnRegister;
 
     public LoginUI() {
-        setTitle("🔑 Đăng nhập Client");
-        setSize(400, 220);
+        setTitle("Đăng nhập Client");
+        setSize(420, 230);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        JPanel panel = new JPanel(new GridLayout(3, 2, 10, 10));
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        JPanel mainPanel = new JPanel(new BorderLayout(12, 12));
+        mainPanel.setBackground(Color.WHITE);
+        mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+        setContentPane(mainPanel);
+
+        // ==== Panel nhập liệu ====
+        JPanel inputPanel = new JPanel(new GridLayout(2, 2, 10, 15));
+        inputPanel.setBackground(Color.WHITE);
 
         JLabel lblUser = new JLabel("Tên đăng nhập:");
         txtUsername = new JTextField();
+
         JLabel lblPass = new JLabel("Mật khẩu:");
         txtPassword = new JPasswordField();
 
-        btnLogin = new JButton("Đăng nhập");
-        btnRegister = new JButton("Đăng ký");
+        inputPanel.add(lblUser);
+        inputPanel.add(txtUsername);
+        inputPanel.add(lblPass);
+        inputPanel.add(txtPassword);
+
+        mainPanel.add(inputPanel, BorderLayout.CENTER);
+
+        // ==== Panel nút ====
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 15, 0));
+        buttonPanel.setBackground(Color.WHITE);
+
+        btnLogin = createButton("Đăng nhập", new Color(46, 204, 113));
+        btnRegister = createButton("Đăng ký", new Color(52, 152, 219));
 
         btnLogin.addActionListener(e -> handleAuth("LOGIN"));
         btnRegister.addActionListener(e -> handleAuth("REGISTER"));
 
-        panel.add(lblUser);
-        panel.add(txtUsername);
-        panel.add(lblPass);
-        panel.add(txtPassword);
-        panel.add(btnLogin);
-        panel.add(btnRegister);
+        buttonPanel.add(btnLogin);
+        buttonPanel.add(btnRegister);
 
-        add(panel);
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+    }
+
+    private JButton createButton(String text, Color bg) {
+        JButton button = new JButton(text);
+        button.setBackground(bg);
+        button.setForeground(Color.WHITE);
+        button.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        return button;
     }
 
     private void handleAuth(String action) {
@@ -66,7 +92,8 @@ public class LoginUI extends JFrame {
             // Nhận phản hồi từ server
             String response = dis.readUTF();
             if (response.equals("AUTH_OK")) {
-                JOptionPane.showMessageDialog(this, "✅ " + (action.equals("LOGIN") ? "Đăng nhập" : "Đăng ký") + " thành công!");
+                JOptionPane.showMessageDialog(this,
+                        (action.equals("LOGIN") ? "Đăng nhập" : "Đăng ký") + " thành công!");
                 this.dispose(); // đóng form login
 
                 // Mở giao diện client
@@ -75,12 +102,12 @@ public class LoginUI extends JFrame {
                     clientUI.setVisible(true);
                 });
             } else {
-                String msg = "❌ " + (action.equals("LOGIN") ? "Đăng nhập thất bại!" : "Đăng ký thất bại!");
+                String msg = (action.equals("LOGIN") ? "Đăng nhập thất bại!" : "Đăng ký thất bại!");
                 JOptionPane.showMessageDialog(this, msg);
                 socket.close();
             }
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "⚠ Không kết nối được server: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Không kết nối được server: " + e.getMessage());
         }
     }
 

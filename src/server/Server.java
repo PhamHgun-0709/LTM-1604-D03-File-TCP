@@ -1,6 +1,7 @@
 package server;
 
 import sql.SQL;
+import com.formdev.flatlaf.FlatLightLaf;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -20,17 +21,28 @@ public class Server extends JFrame {
     private final Map<String, ClientHandler> clients = new HashMap<>();
 
     public Server() {
-        setTitle("📡 File Transfer Server");
-        setSize(600, 400);
+        try {
+            UIManager.setLookAndFeel(new FlatLightLaf()); // Giao diện sáng
+        } catch (Exception e) {
+            System.err.println("Không thể khởi tạo FlatLaf");
+        }
+
+        setTitle("File Transfer Server");
+        setSize(750, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
-        mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        // ===== Main Panel =====
+        JPanel mainPanel = new JPanel(new BorderLayout(12, 12));
+        mainPanel.setBackground(Color.WHITE);
+        mainPanel.setBorder(new EmptyBorder(12, 12, 12, 12));
 
-        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
-        startButton = new JButton("▶ Bắt Server");
-        stopButton = new JButton("⏹ Dừng Server");
+        // ===== Top Buttons =====
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 8));
+        topPanel.setBackground(Color.WHITE);
+
+        startButton = createButton("Bắt đầu Server", new Color(46, 204, 113));
+        stopButton = createButton("Dừng Server", new Color(231, 76, 60));
         stopButton.setEnabled(false);
 
         startButton.addActionListener(e -> startServer());
@@ -39,11 +51,17 @@ public class Server extends JFrame {
         topPanel.add(startButton);
         topPanel.add(stopButton);
 
+        // ===== Log Area =====
         logArea = new JTextArea();
         logArea.setEditable(false);
         logArea.setFont(new Font("Consolas", Font.PLAIN, 13));
-        logArea.setBackground(new Color(240, 240, 240));
+        logArea.setBackground(new Color(30, 30, 30));  // nền đen than
+        logArea.setForeground(new Color(0, 255, 128)); // chữ xanh lá sáng
+        logArea.setCaretColor(Color.WHITE);
+        logArea.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+
         JScrollPane scrollPane = new JScrollPane(logArea);
+        scrollPane.setBorder(BorderFactory.createTitledBorder("Server Log"));
 
         DefaultCaret caret = (DefaultCaret) logArea.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
@@ -54,6 +72,17 @@ public class Server extends JFrame {
         add(mainPanel);
     }
 
+    private JButton createButton(String text, Color bg) {
+        JButton button = new JButton(text);
+        button.setBackground(bg);
+        button.setForeground(Color.WHITE);
+        button.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        return button;
+    }
+
     private void startServer() {
         try {
             SQL.connect();
@@ -61,7 +90,7 @@ public class Server extends JFrame {
 
             serverSocket = new ServerSocket(12345);
             running = true;
-            log("✅ Server đang chạy tại cổng 12345");
+            log("Server đang chạy tại cổng 12345");
             startButton.setEnabled(false);
             stopButton.setEnabled(true);
 
@@ -71,13 +100,13 @@ public class Server extends JFrame {
                         Socket socket = serverSocket.accept();
                         new ClientHandler(socket).start();
                     } catch (IOException e) {
-                        if (running) log("❌ Lỗi khi chấp nhận client: " + e.getMessage());
+                        if (running) log("Lỗi khi chấp nhận client: " + e.getMessage());
                     }
                 }
             }).start();
 
         } catch (IOException e) {
-            log("❌ Không thể khởi động server: " + e.getMessage());
+            log("Không thể khởi động server: " + e.getMessage());
         }
     }
 
@@ -88,11 +117,11 @@ public class Server extends JFrame {
 
             SQL.close();
 
-            log("⛔ Server đã dừng.");
+            log("Server đã dừng.");
             startButton.setEnabled(true);
             stopButton.setEnabled(false);
         } catch (IOException e) {
-            log("❌ Lỗi khi dừng server: " + e.getMessage());
+            log("Lỗi khi dừng server: " + e.getMessage());
         }
     }
 
@@ -114,7 +143,7 @@ public class Server extends JFrame {
                 ch.dos.flush();
             }
         } catch (IOException e) {
-            log("❌ Lỗi khi gửi danh sách client: " + e.getMessage());
+            log("Lỗi khi gửi danh sách client: " + e.getMessage());
         }
     }
 
@@ -133,7 +162,6 @@ public class Server extends JFrame {
                 dis = new DataInputStream(socket.getInputStream());
                 dos = new DataOutputStream(socket.getOutputStream());
 
-                // --- Nhận yêu cầu AUTH ---
                 String action = dis.readUTF();
                 String username = dis.readUTF();
                 String password = dis.readUTF();
@@ -141,10 +169,10 @@ public class Server extends JFrame {
                 boolean success = false;
                 if (action.equals("REGISTER")) {
                     success = SQL.register(username, password);
-                    log("📥 REGISTER từ user: " + username + " → " + (success ? "OK" : "FAIL"));
+                    log("REGISTER từ user: " + username + " → " + (success ? "OK" : "FAIL"));
                 } else if (action.equals("LOGIN")) {
                     success = SQL.login(username, password);
-                    log("📥 LOGIN từ user: " + username + " → " + (success ? "OK" : "FAIL"));
+                    log("LOGIN từ user: " + username + " → " + (success ? "OK" : "FAIL"));
                 }
 
                 if (!success) {
@@ -162,9 +190,8 @@ public class Server extends JFrame {
                     clients.put(clientId, this);
                     updateClientList();
                 }
-                log("🟢 User " + clientId + " đã đăng nhập và kết nối.");
+                log("User " + clientId + " đã đăng nhập và kết nối.");
 
-                // --- Vòng lặp xử lý ---
                 while (running && !socket.isClosed()) {
                     String cmd = dis.readUTF();
 
@@ -182,7 +209,7 @@ public class Server extends JFrame {
                                 target.dos.writeLong(fileSize);
                                 target.dos.flush();
 
-                                log("📨 " + clientId + " muốn gửi file '" + fileName + "' cho " + targetId);
+                                log(clientId + " muốn gửi file '" + fileName + "' cho " + targetId);
                             } else {
                                 dos.writeUTF("ERROR");
                                 dos.writeUTF("Client " + targetId + " không online.");
@@ -197,7 +224,7 @@ public class Server extends JFrame {
                                 sender.dos.writeUTF("ACCEPTED");
                                 sender.dos.writeUTF(clientId);
                                 sender.dos.flush();
-                                log("✅ " + clientId + " chấp nhận nhận file từ " + fromId);
+                                log(clientId + " chấp nhận nhận file từ " + fromId);
                             }
                             break;
                         }
@@ -208,7 +235,7 @@ public class Server extends JFrame {
                                 sender.dos.writeUTF("DECLINED");
                                 sender.dos.writeUTF(clientId);
                                 sender.dos.flush();
-                                log("❌ " + clientId + " từ chối nhận file từ " + fromId);
+                                log(clientId + " từ chối nhận file từ " + fromId);
                             }
                             break;
                         }
@@ -234,7 +261,7 @@ public class Server extends JFrame {
                                 }
                                 target.dos.flush();
 
-                                log("📤 File '" + fileName + "' từ " + clientId + " → " + targetId + " đã gửi xong.");
+                                log("File '" + fileName + "' từ " + clientId + " → " + targetId + " đã gửi xong.");
                             } else {
                                 dos.writeUTF("ERROR");
                                 dos.writeUTF("Client " + targetId + " không online.");
@@ -243,7 +270,7 @@ public class Server extends JFrame {
                             break;
                         }
                         case "LOGOUT": {
-                            log("🚪 User " + clientId + " đã yêu cầu đăng xuất.");
+                            log("User " + clientId + " đã yêu cầu đăng xuất.");
                             dos.writeUTF("AUTH_LOGOUT");
                             dos.flush();
                             return;
@@ -252,14 +279,14 @@ public class Server extends JFrame {
                 }
 
             } catch (IOException e) {
-                log("⚠ Client " + clientId + " ngắt kết nối.");
+                log("Client " + clientId + " ngắt kết nối.");
             } finally {
                 try { socket.close(); } catch (IOException ignored) {}
                 synchronized (clients) {
                     if (clientId != null) {
                         clients.remove(clientId);
                         updateClientList();
-                        log("🔴 Client " + clientId + " đã rời.");
+                        log("Client " + clientId + " đã rời.");
                     }
                 }
             }

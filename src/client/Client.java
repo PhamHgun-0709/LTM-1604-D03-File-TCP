@@ -27,45 +27,56 @@ public class Client extends JFrame {
         this.dos = dos;
 
         setTitle("Client - " + clientId);
-        setSize(600, 400);
+        setSize(650, 420);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        JPanel contentPane = new JPanel(new BorderLayout(10, 10));
-        contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
+        // ==== Main Panel ====
+        JPanel contentPane = new JPanel(new BorderLayout(12, 12));
+        contentPane.setBackground(Color.WHITE);
+        contentPane.setBorder(new EmptyBorder(12, 12, 12, 12));
         setContentPane(contentPane);
 
         // ==== Khu vực log ====
         logArea = new JTextArea();
         logArea.setEditable(false);
+        logArea.setFont(new Font("Consolas", Font.PLAIN, 13));
+        logArea.setBackground(new Color(30, 30, 30));
+        logArea.setForeground(new Color(0, 255, 128));
+        logArea.setCaretColor(Color.WHITE);
+        logArea.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+
         JScrollPane scrollPane = new JScrollPane(logArea);
+        scrollPane.setBorder(BorderFactory.createTitledBorder("Client Log"));
         DefaultCaret caret = (DefaultCaret) logArea.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         contentPane.add(scrollPane, BorderLayout.CENTER);
 
         // ==== Panel control ====
-        JPanel controlPanel = new JPanel(new GridLayout(4, 1, 5, 5));
+        JPanel controlPanel = new JPanel(new GridLayout(4, 1, 8, 8));
+        controlPanel.setBackground(Color.WHITE);
 
         JPanel targetPanel = new JPanel(new BorderLayout(5, 5));
+        targetPanel.setBackground(Color.WHITE);
         targetPanel.add(new JLabel("ID Người nhận:"), BorderLayout.WEST);
         txtTargetId = new JTextField();
         targetPanel.add(txtTargetId, BorderLayout.CENTER);
         controlPanel.add(targetPanel);
 
         JPanel filePanel = new JPanel(new BorderLayout(5, 5));
+        filePanel.setBackground(Color.WHITE);
         chosenFileLabel = new JLabel("Chưa chọn file");
-        chooseFileButton = new JButton("Chọn File...");
+        chooseFileButton = createButton("Chọn File...", new Color(52, 152, 219));
         chooseFileButton.addActionListener(e -> chooseFile());
         filePanel.add(chosenFileLabel, BorderLayout.CENTER);
         filePanel.add(chooseFileButton, BorderLayout.EAST);
         controlPanel.add(filePanel);
 
-        sendFileButton = new JButton("Gửi File");
+        sendFileButton = createButton("Gửi File", new Color(46, 204, 113));
         sendFileButton.addActionListener(e -> sendFile());
         controlPanel.add(sendFileButton);
 
-        // ==== Nút Đăng xuất ====
-        logoutButton = new JButton("Đăng xuất");
+        logoutButton = createButton("Đăng xuất", new Color(231, 76, 60));
         logoutButton.addActionListener(e -> logout());
         controlPanel.add(logoutButton);
 
@@ -73,6 +84,17 @@ public class Client extends JFrame {
 
         // ==== Thread nhận dữ liệu từ server ====
         new Thread(this::listenFromServer).start();
+    }
+
+    private JButton createButton(String text, Color bg) {
+        JButton button = new JButton(text);
+        button.setBackground(bg);
+        button.setForeground(Color.WHITE);
+        button.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        return button;
     }
 
     // chọn file
@@ -202,7 +224,7 @@ public class Client extends JFrame {
                     }
                     case "CLIENT_LIST": {
                         String list = dis.readUTF();
-                        log("👥 Danh sách online: " + list);
+                        log("Danh sách online: " + list);
                         break;
                     }
                     case "AUTH_LOGOUT": {
@@ -215,7 +237,7 @@ public class Client extends JFrame {
                         return;
                     }
                     case "AUTH_FAIL": {
-                        log("❌ Xác thực thất bại.");
+                        log("Xác thực thất bại.");
                         closeClient();
                         SwingUtilities.invokeLater(() -> {
                             dispose();
