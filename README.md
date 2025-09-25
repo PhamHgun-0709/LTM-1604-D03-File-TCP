@@ -56,49 +56,49 @@
 ### Giao diện Server
 
 <p align="center">
-  <img src="docs/Server.png" alt="Server" width="800" height="800"/>
+  <img src="docs/Server.png" alt="Server" width="600" height="600"/>
 </p>
 <p align="center"><i>Hình ảnh 1</i></p>
 
 ### Giao diện Client
 
 <p align="center">
-  <img src="docs/Client.png" alt="Client" width="800" height="800"/>
+  <img src="docs/Client.png" alt="Client" width="600" height="600"/>
 </p>
 <p align="center"><i>Hình ảnh 2</i></p>
 
 ### Danh sách Client online 
 
 <p align="center">
-  <img src="docs/Online.png" alt="Online" width="800" height="800"/>
+  <img src="docs/Online.png" alt="Online" width="600" height="600"/>
 </p>
 <p align="center"><i>Hình ảnh 3</i></p>
 
 ### Chọn file để gửi
 
 <p align="center">
-  <img src="docs/Choose.png" alt="Choose" width="800" height="800"/>
+  <img src="docs/Choose.png" alt="Choose" width="600" height="600"/>
 </p>
 <p align="center"><i>Hình ảnh 4</i></p>
 
 ### Nhận file từ client khác 
 
 <p align="center">
-  <img src="docs/Upload.png" alt="Upload" width="800" height="800"/>
+  <img src="docs/Upload.png" alt="Upload" width="600" height="600"/>
 </p>
 <p align="center"><i>Hình ảnh 5</i></p>
 
 ### Đồng ý nhận file 
 
 <p align="center">
-  <img src="docs/Dongy.png" alt="Dongy" width="800" height="800"/>
+  <img src="docs/Dongy.png" alt="Dongy" width="600" height="600"/>
 </p>
 <p align="center"><i>Hình ảnh 6</i></p>
 
 ### Từ chối nhận file 
 
 <p align="center">
-  <img src="docs/Tuchoi.png" alt="Tuchoi" width="800" height="800"/>
+  <img src="docs/Tuchoi.png" alt="Tuchoi" width="600" height="600"/>
 </p>
 <p align="center"><i>Hình ảnh 7</i></p>
 
@@ -162,6 +162,7 @@ Nếu có bất kỳ thắc mắc hoặc cần hỗ trợ, vui lòng liên hệ:
 - 📧 Email: pthung0709@gmail.com
 
 © 2025 AIoTLab, Faculty of Information Technology, DaiNam University. All rights reserved.
+
 
 
 
