@@ -53,54 +53,61 @@
 ---
 
 ## 🚀 3. Một số hình ảnh hệ thống
+### Giao diện đăng nhập và đăng ký
+
+<p align="center">
+  <img src="docs/login.png" alt="Login" width="600" height="600"/>
+</p>
+<p align="center"><i>Hình ảnh 1</i></p>
+
 ### Giao diện Server
 
 <p align="center">
   <img src="docs/Server.png" alt="Server" width="600" height="600"/>
 </p>
-<p align="center"><i>Hình ảnh 1</i></p>
+<p align="center"><i>Hình ảnh 2</i></p>
 
 ### Giao diện Client
 
 <p align="center">
   <img src="docs/Client.png" alt="Client" width="600" height="600"/>
 </p>
-<p align="center"><i>Hình ảnh 2</i></p>
+<p align="center"><i>Hình ảnh 3</i></p>
 
 ### Danh sách Client online 
 
 <p align="center">
   <img src="docs/Online.png" alt="Online" width="600" height="600"/>
 </p>
-<p align="center"><i>Hình ảnh 3</i></p>
+<p align="center"><i>Hình ảnh 4</i></p>
 
 ### Chọn file để gửi
 
 <p align="center">
   <img src="docs/Choose.png" alt="Choose" width="600" height="600"/>
 </p>
-<p align="center"><i>Hình ảnh 4</i></p>
+<p align="center"><i>Hình ảnh 5</i></p>
 
 ### Nhận file từ client khác 
 
 <p align="center">
   <img src="docs/Upload.png" alt="Upload" width="600" height="600"/>
 </p>
-<p align="center"><i>Hình ảnh 5</i></p>
+<p align="center"><i>Hình ảnh 6</i></p>
 
 ### Đồng ý nhận file 
 
 <p align="center">
   <img src="docs/Dongy.png" alt="Dongy" width="600" height="600"/>
 </p>
-<p align="center"><i>Hình ảnh 6</i></p>
+<p align="center"><i>Hình ảnh 7</i></p>
 
 ### Từ chối nhận file 
 
 <p align="center">
   <img src="docs/Tuchoi.png" alt="Tuchoi" width="600" height="600"/>
 </p>
-<p align="center"><i>Hình ảnh 7</i></p>
+<p align="center"><i>Hình ảnh 8</i></p>
 
 ---
 
