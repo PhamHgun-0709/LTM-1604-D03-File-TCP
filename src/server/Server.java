@@ -1,73 +1,83 @@
 package server;
 
 import sql.SQL;
-import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.FlatDarculaLaf;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.text.DefaultCaret;
+import javax.swing.text.*;
 import java.awt.*;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.*;
 
 public class Server extends JFrame {
-    private JTextArea logArea;
+    private JTextPane logPane;
+    private StyledDocument logDoc;
     private JButton startButton, stopButton;
     private ServerSocket serverSocket;
     private boolean running = false;
-    private final Map<String, ClientHandler> clients = new HashMap<>();
+    private final Map<String, ClientHandler> clients = new ConcurrentHashMap<>();
+    private ExecutorService clientPool;
 
     public Server() {
         try {
-            UIManager.setLookAndFeel(new FlatLightLaf()); // Giao diện sáng
+            UIManager.setLookAndFeel(new FlatDarculaLaf());
+            UIManager.put("Button.arc", 18);
+            UIManager.put("Component.arc", 14);
+            UIManager.put("TextComponent.arc", 14);
+            UIManager.put("defaultFont", new Font("Segoe UI", Font.PLAIN, 14));
         } catch (Exception e) {
             System.err.println("Không thể khởi tạo FlatLaf");
         }
 
         setTitle("File Transfer Server");
-        setSize(750, 500);
+        setSize(820, 540);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // ===== Main Panel =====
+        initUI();
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            stopServer();
+            logInfo("Server JVM exit, tất cả kết nối đóng.");
+        }));
+    }
+
+    private void initUI() {
         JPanel mainPanel = new JPanel(new BorderLayout(12, 12));
-        mainPanel.setBackground(Color.WHITE);
         mainPanel.setBorder(new EmptyBorder(12, 12, 12, 12));
 
-        // ===== Top Buttons =====
-        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 8));
-        topPanel.setBackground(Color.WHITE);
+        JLabel titleLabel = new JLabel("File Transfer Server");
+        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        titleLabel.setForeground(new Color(52, 152, 219));
+        mainPanel.add(titleLabel, BorderLayout.NORTH);
 
-        startButton = createButton("Bắt đầu Server", new Color(46, 204, 113));
+        logPane = new JTextPane();
+        logPane.setEditable(false);
+        logPane.setFont(new Font("JetBrains Mono", Font.PLAIN, 13));
+        logPane.setBackground(new Color(25, 27, 35));
+        logPane.setCaretColor(Color.WHITE);
+        logDoc = logPane.getStyledDocument();
+
+        JScrollPane scrollPane = new JScrollPane(logPane);
+        scrollPane.setBorder(BorderFactory.createTitledBorder("Server Log"));
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 8));
+        startButton = createButton("Bắt đầu Server", new Color(39, 174, 96));
         stopButton = createButton("Dừng Server", new Color(231, 76, 60));
         stopButton.setEnabled(false);
 
         startButton.addActionListener(e -> startServer());
         stopButton.addActionListener(e -> stopServer());
 
-        topPanel.add(startButton);
-        topPanel.add(stopButton);
-
-        // ===== Log Area =====
-        logArea = new JTextArea();
-        logArea.setEditable(false);
-        logArea.setFont(new Font("Consolas", Font.PLAIN, 13));
-        logArea.setBackground(new Color(30, 30, 30));  // nền đen than
-        logArea.setForeground(new Color(0, 255, 128)); // chữ xanh lá sáng
-        logArea.setCaretColor(Color.WHITE);
-        logArea.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
-
-        JScrollPane scrollPane = new JScrollPane(logArea);
-        scrollPane.setBorder(BorderFactory.createTitledBorder("Server Log"));
-
-        DefaultCaret caret = (DefaultCaret) logArea.getCaret();
-        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-
-        mainPanel.add(topPanel, BorderLayout.NORTH);
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
+        buttonPanel.add(startButton);
+        buttonPanel.add(stopButton);
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         add(mainPanel);
     }
@@ -78,19 +88,39 @@ public class Server extends JFrame {
         button.setForeground(Color.WHITE);
         button.setFont(new Font("Segoe UI", Font.BOLD, 14));
         button.setFocusPainted(false);
-        button.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
+        button.setBorder(BorderFactory.createEmptyBorder(8, 18, 8, 18));
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         return button;
     }
 
+    // ==== Logging helper ====
+    private void log(String msg, Color color) {
+        SwingUtilities.invokeLater(() -> {
+            Style style = logPane.addStyle("Style", null);
+            StyleConstants.setForeground(style, color);
+            try {
+                logDoc.insertString(logDoc.getLength(), msg + "\n", style);
+                logPane.setCaretPosition(logDoc.getLength());
+            } catch (BadLocationException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void logInfo(String msg) { log(msg, new Color(39, 174, 96)); }
+    private void logWarn(String msg) { log(msg, new Color(243, 156, 18)); }
+    private void logError(String msg) { log(msg, new Color(231, 76, 60)); }
+
+    // ==== Server control ====
     private void startServer() {
         try {
-            SQL.connect();
             SQL.createUsersTableIfNotExists();
+            SQL.createHistoryTableIfNotExists();
 
             serverSocket = new ServerSocket(12345);
             running = true;
-            log("Server đang chạy tại cổng 12345");
+            clientPool = Executors.newCachedThreadPool();
+            logInfo("Server đang chạy tại cổng 12345");
             startButton.setEnabled(false);
             stopButton.setEnabled(true);
 
@@ -98,65 +128,87 @@ public class Server extends JFrame {
                 while (running) {
                     try {
                         Socket socket = serverSocket.accept();
-                        new ClientHandler(socket).start();
+                        ClientHandler handler = new ClientHandler(socket);
+                        clientPool.submit(handler);
                     } catch (IOException e) {
-                        if (running) log("Lỗi khi chấp nhận client: " + e.getMessage());
+                        if (running) logError("Lỗi khi chấp nhận client: " + e.getMessage());
                     }
                 }
             }).start();
 
         } catch (IOException e) {
-            log("Không thể khởi động server: " + e.getMessage());
+            logError("Không thể khởi động server: " + e.getMessage());
         }
     }
 
     private void stopServer() {
         try {
             running = false;
-            if (serverSocket != null) serverSocket.close();
+            if (clientPool != null) clientPool.shutdownNow();
 
-            SQL.close();
+            for (ClientHandler ch : clients.values()) {
+                try {
+                    ch.dos.writeUTF("SERVER_STOPPED");
+                    ch.dos.flush();
+                    ch.socket.close();
+                } catch (IOException ignored) {}
+            }
+            clients.clear();
 
-            log("Server đã dừng.");
+            if (serverSocket != null && !serverSocket.isClosed())
+                serverSocket.close();
+
+            logWarn("Server đã dừng.");
             startButton.setEnabled(true);
             stopButton.setEnabled(false);
         } catch (IOException e) {
-            log("Lỗi khi dừng server: " + e.getMessage());
+            logError("Lỗi khi dừng server: " + e.getMessage());
         }
-    }
-
-    private void log(String msg) {
-        SwingUtilities.invokeLater(() -> logArea.append(msg + "\n"));
     }
 
     private void updateClientList() {
         try {
-            StringBuilder sb = new StringBuilder();
-            for (String id : clients.keySet()) {
-                sb.append(id).append(",");
-            }
-            String list = sb.toString();
-
+            String list = String.join(",", clients.keySet());
             for (ClientHandler ch : clients.values()) {
                 ch.dos.writeUTF("CLIENT_LIST");
                 ch.dos.writeUTF(list);
                 ch.dos.flush();
             }
         } catch (IOException e) {
-            log("Lỗi khi gửi danh sách client: " + e.getMessage());
+            logError("Lỗi khi gửi danh sách client: " + e.getMessage());
         }
     }
 
-    class ClientHandler extends Thread {
-        private Socket socket;
-        private DataInputStream dis;
-        private DataOutputStream dos;
-        private String clientId;
+    // ==== Client handler ====
+    class ClientHandler implements Runnable {
+        final Socket socket;
+        DataInputStream dis;
+        DataOutputStream dos;
+        String clientId;
+        boolean loggedOut = false;
 
-        public ClientHandler(Socket socket) {
-            this.socket = socket;
+        public ClientHandler(Socket socket) { this.socket = socket; }
+
+        private boolean handleAuth(String action, String username, String password) throws IOException {
+            if ("REGISTER".equals(action)) {
+                String result = SQL.tryRegister(username, password);
+                dos.writeUTF(result);
+                dos.flush();
+                if ("REGISTER_OK".equals(result)) logInfo("Đăng ký thành công: " + username);
+                else logError("Đăng ký thất bại: " + username);
+                return "REGISTER_OK".equals(result);
+
+            } else if ("LOGIN".equals(action)) {
+                boolean success = SQL.login(username, password);
+                dos.writeUTF(success ? "AUTH_OK" : "AUTH_FAIL");
+                dos.flush();
+                if (!success) logError("Đăng nhập thất bại: " + username);
+                return success;
+            }
+            return false;
         }
 
+        @Override
         public void run() {
             try {
                 dis = new DataInputStream(socket.getInputStream());
@@ -166,130 +218,120 @@ public class Server extends JFrame {
                 String username = dis.readUTF();
                 String password = dis.readUTF();
 
-                boolean success = false;
-                if (action.equals("REGISTER")) {
-                    success = SQL.register(username, password);
-                    log("REGISTER từ user: " + username + " → " + (success ? "OK" : "FAIL"));
-                } else if (action.equals("LOGIN")) {
-                    success = SQL.login(username, password);
-                    log("LOGIN từ user: " + username + " → " + (success ? "OK" : "FAIL"));
-                }
-
-                if (!success) {
-                    dos.writeUTF("AUTH_FAIL");
-                    dos.flush();
+                if (!handleAuth(action, username, password)) {
                     socket.close();
                     return;
-                } else {
-                    dos.writeUTF("AUTH_OK");
-                    dos.flush();
-                    clientId = username;
                 }
 
-                synchronized (clients) {
-                    clients.put(clientId, this);
-                    updateClientList();
-                }
-                log("User " + clientId + " đã đăng nhập và kết nối.");
+                clientId = username;
+                clients.put(clientId, this);
+                updateClientList();
+                logInfo("User " + clientId + " đã đăng nhập.");
 
                 while (running && !socket.isClosed()) {
                     String cmd = dis.readUTF();
-
                     switch (cmd) {
-                        case "SEND_REQUEST": {
-                            String targetId = dis.readUTF();
-                            String fileName = dis.readUTF();
-                            long fileSize = dis.readLong();
-
-                            ClientHandler target = clients.get(targetId);
-                            if (target != null) {
-                                target.dos.writeUTF("REQUEST_RECEIVE");
-                                target.dos.writeUTF(clientId);
-                                target.dos.writeUTF(fileName);
-                                target.dos.writeLong(fileSize);
-                                target.dos.flush();
-
-                                log(clientId + " muốn gửi file '" + fileName + "' cho " + targetId);
-                            } else {
-                                dos.writeUTF("ERROR");
-                                dos.writeUTF("Client " + targetId + " không online.");
-                                dos.flush();
-                            }
-                            break;
-                        }
-                        case "ACCEPT": {
-                            String fromId = dis.readUTF();
-                            ClientHandler sender = clients.get(fromId);
-                            if (sender != null) {
-                                sender.dos.writeUTF("ACCEPTED");
-                                sender.dos.writeUTF(clientId);
-                                sender.dos.flush();
-                                log(clientId + " chấp nhận nhận file từ " + fromId);
-                            }
-                            break;
-                        }
-                        case "DECLINE": {
-                            String fromId = dis.readUTF();
-                            ClientHandler sender = clients.get(fromId);
-                            if (sender != null) {
-                                sender.dos.writeUTF("DECLINED");
-                                sender.dos.writeUTF(clientId);
-                                sender.dos.flush();
-                                log(clientId + " từ chối nhận file từ " + fromId);
-                            }
-                            break;
-                        }
-                        case "SEND_FILE": {
-                            String targetId = dis.readUTF();
-                            String fileName = dis.readUTF();
-                            long fileSize = dis.readLong();
-
-                            ClientHandler target = clients.get(targetId);
-                            if (target != null) {
-                                target.dos.writeUTF("RECEIVE_FILE");
-                                target.dos.writeUTF(clientId);
-                                target.dos.writeUTF(fileName);
-                                target.dos.writeLong(fileSize);
-
-                                byte[] buffer = new byte[4096];
-                                long remaining = fileSize;
-                                while (remaining > 0) {
-                                    int read = dis.read(buffer, 0, (int) Math.min(buffer.length, remaining));
-                                    if (read == -1) break;
-                                    target.dos.write(buffer, 0, read);
-                                    remaining -= read;
-                                }
-                                target.dos.flush();
-
-                                log("File '" + fileName + "' từ " + clientId + " → " + targetId + " đã gửi xong.");
-                            } else {
-                                dos.writeUTF("ERROR");
-                                dos.writeUTF("Client " + targetId + " không online.");
-                                dos.flush();
-                            }
-                            break;
-                        }
-                        case "LOGOUT": {
-                            log("User " + clientId + " đã yêu cầu đăng xuất.");
+                        case "SEND_REQUEST" -> handleSendRequest();
+                        case "ACCEPT" -> handleAccept();
+                        case "DECLINE" -> handleDecline();
+                        case "SEND_FILE" -> handleSendFile();
+                        case "GET_HISTORY" -> handleGetHistory();
+                        case "LOGOUT" -> {
+                            logWarn("User " + clientId + " đã đăng xuất.");
                             dos.writeUTF("AUTH_LOGOUT");
                             dos.flush();
+                            loggedOut = true;
+                            socket.close();
                             return;
                         }
+                        default -> logWarn("Lệnh không rõ từ " + clientId + ": " + cmd);
                     }
                 }
 
-            } catch (IOException e) {
-                log("Client " + clientId + " ngắt kết nối.");
-            } finally {
-                try { socket.close(); } catch (IOException ignored) {}
-                synchronized (clients) {
-                    if (clientId != null) {
-                        clients.remove(clientId);
-                        updateClientList();
-                        log("Client " + clientId + " đã rời.");
-                    }
-                }
+            } catch (IOException ignored) {}
+            finally { safeDisconnect(); }
+        }
+
+        private void safeDisconnect() {
+            try { socket.close(); } catch (IOException ignored) {}
+            clients.remove(clientId);
+            updateClientList();
+            if (!loggedOut && clientId != null) logError("Client " + clientId + " đã rời.");
+        }
+
+        private void handleSendRequest() throws IOException {
+            String targetId = dis.readUTF();
+            String fileName = dis.readUTF();
+            long fileSize = dis.readLong();
+
+            ClientHandler target = clients.get(targetId);
+            if (target != null) {
+                target.dos.writeUTF("REQUEST_RECEIVE");
+                target.dos.writeUTF(clientId);
+                target.dos.writeUTF(fileName);
+                target.dos.writeLong(fileSize);
+                target.dos.flush();
+                logWarn(clientId + " muốn gửi '" + fileName + "' → " + targetId);
+            } else logError("Client " + targetId + " không online.");
+        }
+
+        private void handleAccept() throws IOException {
+            String senderId = dis.readUTF();
+            ClientHandler sender = clients.get(senderId);
+            if (sender != null) {
+                sender.dos.writeUTF("ACCEPTED");
+                sender.dos.writeUTF(clientId);
+                sender.dos.flush();
+                logInfo(clientId + " đồng ý nhận file từ " + senderId);
             }
+        }
+
+        private void handleDecline() throws IOException {
+            String senderId = dis.readUTF();
+            ClientHandler sender = clients.get(senderId);
+            if (sender != null) {
+                sender.dos.writeUTF("DECLINED");
+                sender.dos.flush();
+                logWarn(clientId + " từ chối file từ " + senderId);
+            }
+        }
+
+        private void handleSendFile() throws IOException {
+            String targetId = dis.readUTF();
+            String fileName = dis.readUTF();
+            long fileSize = dis.readLong();
+
+            ClientHandler target = clients.get(targetId);
+            if (target != null) {
+                target.dos.writeUTF("RECEIVE_FILE");
+                target.dos.writeUTF(clientId);
+                target.dos.writeUTF(fileName);
+                target.dos.writeLong(fileSize);
+                target.dos.flush();
+
+                byte[] buffer = new byte[16 * 1024];
+                long remaining = fileSize;
+                while (remaining > 0) {
+                    int read = dis.read(buffer, 0, (int)Math.min(buffer.length, remaining));
+                    if (read == -1) break;
+                    target.dos.write(buffer, 0, read);
+                    remaining -= read;
+                }
+                target.dos.flush();
+                logInfo(clientId + " đã gửi file '" + fileName + "' → " + targetId);
+
+                SQL.saveFileHistory(clientId, targetId, fileName, fileSize, "SENT", null);
+            } else logError("Client đích " + targetId + " không online, không thể gửi file.");
+        }
+
+        private void handleGetHistory() throws IOException {
+            List<String[]> history = SQL.getHistory(clientId);
+            StringBuilder sb = new StringBuilder();
+            for (String[] row : history) sb.append(String.join("|", row)).append(";");
+            dos.writeUTF("HISTORY_DATA");
+            dos.writeUTF(sb.toString());
+            dos.flush();
+            logInfo("Đã gửi lịch sử cho " + clientId);
         }
     }
 

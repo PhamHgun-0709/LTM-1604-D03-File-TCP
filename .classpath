@@ -16,5 +16,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="E:/LapTrinhMang/jbcrypt-0.4.jar"/>
+	<classpathentry kind="lib" path="E:/LapTrinhMang/HikariCP-7.0.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
