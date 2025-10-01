@@ -22,24 +22,24 @@
 ---
 
 ## 📖 1. Giới thiệu
-Ứng dụng này mô phỏng việc **truyền file qua mạng** bằng mô hình **Client – Server**.  
+Ứng dụng này mô phỏng việc **truyền file qua mạng TCP** theo mô hình **Client – Server**.  
 
-- **Server**: Lắng nghe client kết nối, xác thực tài khoản (login/register qua MySQL), quản lý danh sách client và làm trung gian truyền file.  
-- **Client**: Có 2 phần chính:
-  - `LoginUI`: Đăng nhập hoặc đăng ký với server.  
-  - `ClientUI`: Sau khi đăng nhập thành công, cho phép gửi/nhận file.  
+- **Server**:  
+  - Lắng nghe client kết nối qua Socket TCP.  
+  - Xác thực tài khoản (đăng nhập/đăng ký) bằng **MySQL**.  
+  - Quản lý danh sách client online.  
+  - Trung gian truyền file giữa các client.  
 
-**Mục tiêu chính:**  
-- Hiểu nguyên lý hoạt động của giao thức TCP khi truyền dữ liệu.  
-- Xây dựng ứng dụng Java Swing kết nối Client – Server.  
-- Thực hành thao tác với CSDL MySQL, Socket và xử lý file.  
+- **Client**:  
+  - `LoginUI`: Đăng nhập/Đăng ký với Server.  
+  - `ClientUI`: Gửi/nhận file, đồng ý/từ chối, xem lịch sử truyền file.  
 
-**Các chức năng chính:**  
-- Đăng ký và đăng nhập tài khoản.  
-- Gửi file từ một Client → Client khác thông qua Server.  
-- Nhận file từ Client khác, đồng ý hoặc từ chối.  
+**Chức năng chính:**  
+- Đăng ký và đăng nhập tài khoản (lưu CSDL MySQL, hash mật khẩu bằng BCrypt).  
+- Gửi file từ một client → client khác thông qua server.  
+- Nhận file và chọn Đồng ý hoặc Từ chối.  
 - Cập nhật danh sách client online theo thời gian thực.  
-- Quản lý nhiều client kết nối đồng thời.  
+- Ghi lại lịch sử gửi/nhận file vào bảng `file_history`. 
 
 ---
 
@@ -50,25 +50,26 @@
   <img src="https://img.shields.io/badge/JDK-8%2B-green?style=for-the-badge"/>
   <img src="https://img.shields.io/badge/TCP%20Protocol-808080?style=for-the-badge"/>
   <img src="https://img.shields.io/badge/Socket-0078D7?style=for-the-badge&logo=socket.io&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Network-1E90FF?style=for-the-badge"/>
   <img src="https://img.shields.io/badge/Java%20Swing-8A2BE2?style=for-the-badge"/>
   <img src="https://img.shields.io/badge/FlatLaf-2F4F4F?style=for-the-badge"/>
   <img src="https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white"/>
+  <img src="https://img.shields.io/badge/HikariCP-008000?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/BCrypt-FF4500?style=for-the-badge"/>
 </p>
 
 ---
 
 ## 🚀 3. Một số hình ảnh hệ thống
-### Giao diện đăng nhập và đăng ký
-
-<p align="center">
-  <img src="docs/Login.png" alt="Login" width="500"/>
-</p>
-
 ### Giao diện Server
 
 <p align="center">
   <img src="docs/Server.png" alt="Server" width="600"/>
+</p>
+
+### Giao diện đăng nhập và đăng ký
+
+<p align="center">
+  <img src="docs/Login.png" alt="Login" width="500"/>
 </p>
 
 ### Giao diện Client
@@ -104,7 +105,7 @@
 ### Lịch sử gửi, nhận file
 
 <p align="center">
-  <img src="docs/History.png" alt="Tuchoi" width="500"/>
+  <img src="docs/History.png" alt="History" width="500"/>
 </p>
 
 ---
@@ -117,43 +118,39 @@
    ```bash
    java -version
    javac -version
-  ```
-
+  ``
+  
 2. **Cài đặt MySQL và tạo CSDL mới:**
-```bash
-CREATE DATABASE `ltm-1604-d03-file-tcp`;
-```
+    ```bash
+    CREATE DATABASE `ltm_1604_d03_file_tcp`;
+    ```
 
 #### Bước 2: Cấu hình Database
 - Chỉnh sửa thông tin kết nối trong file `sql/SQL.java`:
 ```bash
-private static final String URL = "jdbc:mysql://localhost:3306/ltm-1604-d03-file-tcp";
-private static final String USER = "root";
-private static final String PASSWORD = "your_password_here";
+config.setJdbcUrl("jdbc:mysql://localhost:3306/ltm_1604_d03_file_tcp?useSSL=false&serverTimezone=UTC");
+config.setUsername("root");
+config.setPassword("your_password_here");
 ```
-- Chạy server lần đầu để tự động tạo bảng `users`.
+- Server khi chạy lần đầu sẽ tự động tạo bảng `users` và `file_history`.
 
 #### Bước 3: Biên dịch mã nguồn
 - Mở terminal, điều hướng đến thư mục project và chạy:
 ```bash
-javac server/Server.java client/LoginUI.java client/Client.java sql/SQL.java
+javac -cp ".;lib/*" server\Server.java client\LoginUI.java client\Client.java sql\SQL.java
 ```
 #### Bước 4: Chạy ứng dụng
 1. Khởi động Server:
   ```bash
-  java server.Server
+ java -cp ".;lib/*" server.Server
   ```
-- Server sẽ mở port 12345.
-- Kết nối tới MySQL, tạo bảng users nếu chưa có.
 2. Khởi động Client (LoginUI):
   ```bash
-  java client.LoginUI
+  java -cp ".;lib/*" client.LoginUI
   ```
-- Người dùng nhập tên đăng nhập + mật khẩu để login/register.
-- Nếu thành công → mở giao diện Client.
 
 3. Gửi/Nhận File:
-- Client nhập ID người nhận, chọn file và gửi.
+- Client chọn ID người nhận, chọn file và gửi.
 - Người nhận sẽ thấy thông báo, có thể Đồng ý hoặc Từ chối.
 - File được lưu mặc định trong thư mục downloads/.
 
@@ -168,14 +165,6 @@ Nếu có bất kỳ thắc mắc hoặc cần hỗ trợ, vui lòng liên hệ:
 - Email: pthung0709@gmail.com
 
 © 2025 AIoTLab, Faculty of Information Technology, DaiNam University. All rights reserved.
-
-
-
-
-
-
-
-
 
 
 
