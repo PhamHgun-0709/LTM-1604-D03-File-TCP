@@ -80,8 +80,7 @@
 ### Chọn file để gửi
 
 <p align="center">
-  <img src="docs/Choose.png" alt="Choose" width="300"/>
-  <img src="docs/Choose2.png" alt="Choose2" width="300"/>
+  <img src="docs/Choose.png" alt="Choose" width="600"/>
 </p>
 
 ### Nhận file từ client khác 
@@ -100,6 +99,12 @@
 
 <p align="center">
   <img src="docs/Tuchoi.png" alt="Tuchoi" width="500"/>
+</p>
+
+### Lịch sử gửi, nhận file
+
+<p align="center">
+  <img src="docs/History.png" alt="Tuchoi" width="500"/>
 </p>
 
 ---
@@ -163,6 +168,7 @@ Nếu có bất kỳ thắc mắc hoặc cần hỗ trợ, vui lòng liên hệ:
 - Email: pthung0709@gmail.com
 
 © 2025 AIoTLab, Faculty of Information Technology, DaiNam University. All rights reserved.
+
 
 
 
