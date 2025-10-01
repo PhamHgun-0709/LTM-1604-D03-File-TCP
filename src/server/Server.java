@@ -18,6 +18,7 @@ public class Server extends JFrame {
     private JTextPane logPane;
     private StyledDocument logDoc;
     private JButton startButton, stopButton;
+    private JTextField txtPort;
     private ServerSocket serverSocket;
     private boolean running = false;
     private final Map<String, ClientHandler> clients = new ConcurrentHashMap<>();
@@ -51,10 +52,12 @@ public class Server extends JFrame {
         JPanel mainPanel = new JPanel(new BorderLayout(12, 12));
         mainPanel.setBorder(new EmptyBorder(12, 12, 12, 12));
 
-        JLabel titleLabel = new JLabel("File Transfer Server");
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
-        titleLabel.setForeground(new Color(52, 152, 219));
-        mainPanel.add(titleLabel, BorderLayout.NORTH);
+        // Thanh config nhập port
+        JPanel configPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
+        configPanel.add(new JLabel("Port:"));
+        txtPort = new JTextField("12345", 8);
+        configPanel.add(txtPort);
+        mainPanel.add(configPanel, BorderLayout.NORTH);
 
         logPane = new JTextPane();
         logPane.setEditable(false);
@@ -114,15 +117,18 @@ public class Server extends JFrame {
     // ==== Server control ====
     private void startServer() {
         try {
+            int port = Integer.parseInt(txtPort.getText().trim());
+
             SQL.createUsersTableIfNotExists();
             SQL.createHistoryTableIfNotExists();
 
-            serverSocket = new ServerSocket(12345);
+            serverSocket = new ServerSocket(port);
             running = true;
             clientPool = Executors.newCachedThreadPool();
-            logInfo("Server đang chạy tại cổng 12345");
+            logInfo("Server đang chạy tại cổng " + port);
             startButton.setEnabled(false);
             stopButton.setEnabled(true);
+            txtPort.setEnabled(false);
 
             new Thread(() -> {
                 while (running) {
@@ -136,7 +142,7 @@ public class Server extends JFrame {
                 }
             }).start();
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             logError("Không thể khởi động server: " + e.getMessage());
         }
     }
@@ -161,6 +167,7 @@ public class Server extends JFrame {
             logWarn("Server đã dừng.");
             startButton.setEnabled(true);
             stopButton.setEnabled(false);
+            txtPort.setEnabled(true);
         } catch (IOException e) {
             logError("Lỗi khi dừng server: " + e.getMessage());
         }

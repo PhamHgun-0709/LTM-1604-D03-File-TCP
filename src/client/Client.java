@@ -8,7 +8,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
@@ -18,6 +17,9 @@ import java.util.List;
 public class Client extends JFrame {
     private final String clientId;
     private final String password;
+    private final String serverIp;
+    private final int serverPort;
+
     private Socket socket;
     private DataInputStream dis;
     private DataOutputStream dos;
@@ -33,12 +35,15 @@ public class Client extends JFrame {
     private volatile boolean listening = true;
 
     public Client(Socket socket, String clientId, String password,
-                  DataInputStream dis, DataOutputStream dos) {
+                  DataInputStream dis, DataOutputStream dos,
+                  String serverIp, int serverPort) {
         this.socket = socket;
         this.clientId = clientId;
         this.password = password;
         this.dis = dis;
         this.dos = dos;
+        this.serverIp = serverIp;
+        this.serverPort = serverPort;
 
         setTitle("Client - " + clientId);
         setSize(800, 520);
@@ -284,23 +289,21 @@ public class Client extends JFrame {
         String[] cols = {"Thời gian", "Người gửi", "Người nhận", "Tên file", "Kích thước", "Trạng thái", "Đường dẫn"};
         String[][] data = history.toArray(new String[0][]);
 
-        // Tạo JTable và tắt edit toàn bộ cell
         JTable table = new JTable(data, cols) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // không cho phép edit
+                return false;
             }
         };
         table.setFillsViewportHeight(true);
 
-        // Listener double click mở thư mục chứa file hoặc thông báo file mất
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     int row = table.getSelectedRow();
                     if (row != -1) {
-                        String path = (String) table.getValueAt(row, 6); // cột đường dẫn
+                        String path = (String) table.getValueAt(row, 6);
                         if (path != null && !path.isBlank()) {
                             java.io.File file = new java.io.File(path);
                             if (file.exists()) {
@@ -322,7 +325,6 @@ public class Client extends JFrame {
         sp.setPreferredSize(new Dimension(700, 300));
         JOptionPane.showMessageDialog(this, sp, "Lịch sử gửi/nhận file", JOptionPane.PLAIN_MESSAGE);
     }
-
 
     private void showPopup(String msg) {
         JOptionPane optionPane = new JOptionPane(msg, JOptionPane.INFORMATION_MESSAGE);
@@ -379,12 +381,12 @@ public class Client extends JFrame {
     }
 
     private void reconnect() {
-        showLog("Đang thử kết nối lại server...", Color.ORANGE);
+        showLog("Đang thử kết nối lại server " + serverIp + ":" + serverPort, Color.ORANGE);
         try {
             listening = false;
             if (socket != null && !socket.isClosed()) socket.close();
 
-            socket = new Socket("localhost", 12345);
+            socket = new Socket(serverIp, serverPort);
             dos = new DataOutputStream(socket.getOutputStream());
             dis = new DataInputStream(socket.getInputStream());
 
